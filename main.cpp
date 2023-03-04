@@ -29,13 +29,6 @@ public:
         os << "Cell:\t" << "X=" << cell.x << "; Y=" << cell.y << "; Size=" << cell.cellSize << '\n';
         return os;
     }
-
-    // cell setter
-    void setCell(int _x = 0, int _y = 0, int _cS = 0) {
-        x = _x;
-        y = _y;
-        cellSize = _cS;
-    }
 };
 
 // The window
