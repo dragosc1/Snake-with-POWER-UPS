@@ -26,6 +26,7 @@ public:
     // cell operator<<
     friend std::ostream& operator<<(std::ostream& os, const Cell& cell) {
         os << "Cell: " << cell.x << ' ' << cell.y << ' ' << cell.cellSize << '\n';
+        return os;
     }
 };
 
@@ -42,6 +43,7 @@ public:
     // window operator<<
     friend std::ostream& operator<<(std::ostream& os, const Window& window) {
         os << "Window dimensions: " << window.width << 'x' << window.height << '\n';
+        return os;
     }
 };
 
@@ -59,6 +61,7 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Snake& snake) {
         os << "Snake cells:\n";
         for (Cell cell : snake.body) os << cell << '\n';
+        return os;
     }
 };
 
@@ -76,9 +79,11 @@ public:
     // Snake operator<<
     friend std::ostream& operator<<(std::ostream& os, const World& world) {
         os << world.snake << world.fruit << '\n';
+        return os;
     }
 };
 
+// The game
 class Game {
 private:
     // game data
@@ -92,6 +97,7 @@ public:
     // Game operator<<
     friend std::ostream& operator<<(std::ostream& os, const Game& game) {
         os << game.world << game.window << '\n';
+        return os;
     }
 };
 
