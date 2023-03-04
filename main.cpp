@@ -4,60 +4,98 @@
 // A cell on the screen
 class Cell {
 private:
-    int x, y;
+    // cell data
+    int x, y, cellSize;
 public:
-    // constructor
-    Cell(int _x = 0, int _y = 0) : x(_x), y(_y) {}
-    // getters si setters
-    int getX() const { return x; }
-    int getY() const { return y; }
-    void setX(int _x) { x = _x; }
-    void setY(int _y) { y = _y; }
+    // cell constructor
+    Cell(int _x = 0, int _y = 0, int _cS = 10) : x(_x), y(_y), cellSize(_cS) {}
+
+    // cell copy constructor
+    Cell(const Cell& other) : x(other.x), y(other.y), cellSize(other.cellSize) {}
+
+    // cell operator=
+    Cell& operator= (const Cell& other) {
+        x = other.x;
+        y = other.y;
+        cellSize = other.cellSize;
+    }
+
+    // cell destructor
+    ~Cell() {}
+
+    // cell operator<<
+    friend std::ostream& operator<<(std::ostream& os, const Cell& cell) {
+        os << "Cell: " << cell.x << ' ' << cell.y << ' ' << cell.cellSize << '\n';
+    }
 };
 
 // The window in which the game is played
 class Window {
 private:
+    // window data
     int width;
     int height;
 public:
+    // window constructor
     Window(int _width = 1920, int _height = 1080) : width(_width), height(_height) {}
-    int getHeight() const { return height; }
-    int getWidth() const { return width; }
-    void setHeight(int _height) { height = _height; }
-    void setWidth(int _width) { width = _width; }
+
+    // window operator<<
+    friend std::ostream& operator<<(std::ostream& os, const Window& window) {
+        os << "Window dimensions: " << window.width << 'x' << window.height << '\n';
+    }
 };
 
+// The snake
 class Snake {
 private:
+    // snake data
     std::vector<Cell> body;
 public:
-    Snake() {
-
-    }
+    // snake constructors
+    Snake() { body.resize(3); }
     Snake(const std::vector<Cell>& _body) : body(_body) {}
+
+    // Snake operator<<
+    friend std::ostream& operator<<(std::ostream& os, const Snake& snake) {
+        os << "Snake cells:\n";
+        for (Cell cell : snake.body) os << cell << '\n';
+    }
 };
 
+// The World
 class World {
 private:
+    // world data
     Snake snake;
     Cell fruit;
 public:
+    // world constructors
+    World() = default;
+    World(const Snake _snake, const Cell _fruit) : snake(_snake), fruit(_fruit) {}
 
+    // Snake operator<<
+    friend std::ostream& operator<<(std::ostream& os, const World& world) {
+        os << world.snake << world.fruit << '\n';
+    }
 };
 
 class Game {
 private:
+    // game data
     World world;
     Window window;
-    int cellSize;
 public:
-    Game() {
+    // game constructors
+    Game() = default;
+    Game(const World &_world, const Window &_window) : world(_world), window(_window) {}
+
+    // Game operator<<
+    friend std::ostream& operator<<(std::ostream& os, const Game& game) {
+        os << game.world << game.window << '\n';
     }
 };
 
 int main() {
     Game game;
-
     return 0;
 }
