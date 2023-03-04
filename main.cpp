@@ -18,6 +18,7 @@ public:
         x = other.x;
         y = other.y;
         cellSize = other.cellSize;
+        return *this;
     }
 
     // cell destructor
@@ -74,7 +75,7 @@ private:
 public:
     // world constructors
     World() = default;
-    World(const Snake _snake, const Cell _fruit) : snake(_snake), fruit(_fruit) {}
+    World(const Snake &_snake, const Cell &_fruit) : snake(_snake), fruit(_fruit) {}
 
     // Snake operator<<
     friend std::ostream& operator<<(std::ostream& os, const World& world) {
