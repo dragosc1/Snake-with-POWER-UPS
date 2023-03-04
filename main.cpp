@@ -26,12 +26,19 @@ public:
 
     // cell operator<<
     friend std::ostream& operator<<(std::ostream& os, const Cell& cell) {
-        os << "Cell: " << cell.x << ' ' << cell.y << ' ' << cell.cellSize << '\n';
+        os << "Cell:\t" << "X=" << cell.x << "; Y=" << cell.y << "; Size=" << cell.cellSize << '\n';
         return os;
+    }
+
+    // cell setter
+    void setCell(int _x = 0, int _y = 0, int _cS = 0) {
+        x = _x;
+        y = _y;
+        cellSize = _cS;
     }
 };
 
-// The window in which the game is played
+// The window
 class Window {
 private:
     // window data
@@ -46,6 +53,16 @@ public:
         os << "Window dimensions: " << window.width << 'x' << window.height << '\n';
         return os;
     }
+
+    // window width setter
+    void setWidth(int _width) {
+        width = _width;
+    }
+
+    // window height setter
+    void setHeight(int _height) {
+        height = _height;
+    }
 };
 
 // The snake
@@ -56,9 +73,9 @@ private:
 public:
     // snake constructors
     Snake() { body.resize(3); }
-    Snake(const std::vector<Cell>& _body) : body(_body) {}
+    explicit Snake(const std::vector<Cell>& _body) : body(_body) {}
 
-    // Snake operator<<
+    // snake operator<<
     friend std::ostream& operator<<(std::ostream& os, const Snake& snake) {
         os << "Snake cells:\n";
         for (Cell cell : snake.body) os << cell << '\n';
@@ -77,9 +94,9 @@ public:
     World() = default;
     World(const Snake &_snake, const Cell &_fruit) : snake(_snake), fruit(_fruit) {}
 
-    // Snake operator<<
+    // world operator<<
     friend std::ostream& operator<<(std::ostream& os, const World& world) {
-        os << world.snake << world.fruit << '\n';
+        os << world.snake << '\n' << "Fruit: \n" << world.fruit << '\n';
         return os;
     }
 };
@@ -95,14 +112,26 @@ public:
     Game() = default;
     Game(const World &_world, const Window &_window) : world(_world), window(_window) {}
 
-    // Game operator<<
+    // game operator<<
     friend std::ostream& operator<<(std::ostream& os, const Game& game) {
         os << game.world << game.window << '\n';
         return os;
     }
+
+    // window setter
+    void setWindow(int _width = 1920, int _height = 1080) {
+        window.setWidth(_width);
+        window.setHeight(_height);
+    }
 };
 
 int main() {
+    // declare and display the default values of the game object
     Game game;
+    std::cout << game;
+
+    // set the window to 800x600 and then display the changes
+    game.setWindow(800, 600);
+    std::cout << game;
     return 0;
 }
