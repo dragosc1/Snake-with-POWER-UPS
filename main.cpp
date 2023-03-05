@@ -82,10 +82,11 @@ private:
     // world data
     Snake snake;
     Cell fruit;
+    std::vector<Cell> powerUps;
 public:
     // world constructors
     World() = default;
-    World(const Snake &_snake, const Cell &_fruit) : snake(_snake), fruit(_fruit) {}
+    World(const Snake &_snake, const Cell &_fruit, const std::vector<Cell> &pU) : snake(_snake), fruit(_fruit), powerUps(pU) {}
 
     // world operator<<
     friend std::ostream& operator<<(std::ostream& os, const World& world) {
