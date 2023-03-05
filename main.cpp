@@ -91,6 +91,9 @@ public:
     // world operator<<
     friend std::ostream& operator<<(std::ostream& os, const World& world) {
         os << world.snake << '\n' << "Fruit: \n" << world.fruit << '\n';
+        std::cout << "PowerUps available:\n\n";
+        for (Cell cell : world.powerUps)
+            std::cout << cell << '\n';
         return os;
     }
 };
