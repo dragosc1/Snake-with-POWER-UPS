@@ -26,7 +26,7 @@ private:
     int x, y, cellSize;
 public:
     // cell constructor
-    Cell(int _x = 0, int _y = 0, int _cS = 10) : x(_x), y(_y), cellSize(_cS) {}
+    Cell(int _x = 0, int _y = 0, int _cS = 16) : x(_x), y(_y), cellSize(_cS) {}
 
     // cell copy constructor
     Cell(const Cell& other) : x(other.x), y(other.y), cellSize(other.cellSize) {}
@@ -101,6 +101,20 @@ public:
         window = other.window;
     }
 
+    // window begin draw
+    void beginDraw() {
+        window->clear(sf::Color::Black);
+    }
+
+    // window end draw
+    void endDraw() {
+        window->display();
+    }
+
+    // window draw
+    void draw(sf::Drawable& drawable) {
+        window->draw(drawable);
+    }
 };
 
 // The snake
@@ -224,11 +238,15 @@ private:
     Snake snake;
     Cell fruit;
     std::vector<Cell> powerUps;
+    sf::RectangleShape bounds[4];
+    sf::CircleShape appleShape;
 public:
     // world constructors
-    World() = default;
     World(const Snake &_snake, const Cell &_fruit, const std::vector<Cell> &pU) : snake(_snake), fruit(_fruit), powerUps(pU) {}
-
+    World() {
+        appleShape.setFillColor(sf::Color::Red);
+        appleShape.setRadius(8);
+    }
     // world operator<<
     friend std::ostream& operator<<(std::ostream& os, const World& world) {
         os << world.snake << '\n' << "Fruit: \n" << world.fruit << '\n';
@@ -237,6 +255,16 @@ public:
             std::cout << cell << '\n';
         return os;
     }
+
+    void render(sf::RenderWindow* _window) {
+        for (int i = 0; i < 4; ++i) {
+            _window->draw(bounds[i]);
+        }
+        _window->draw(appleShape);
+    }
+
+    // world destructor
+    ~World() {}
 };
 
 // The game
@@ -267,6 +295,13 @@ public:
         return window.getWindow();
     }
 
+    // render game
+    void render() {
+        window.beginDraw();
+        world.render(window.getWindow());
+        window.endDraw();
+    }
+
     // game destructor
     ~Game() {}
 };
@@ -280,7 +315,7 @@ int main() {
     while (game.getWindow()->isOpen()) {
          // game.handleInput();
          // game.update();
-         // game.render();
+          game.render();
     }
     return 0;
 }
