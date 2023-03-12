@@ -43,8 +43,10 @@ public:
     int getX() const { return x; }
     int getY() const { return y; }
 
+    /*
     void setX(int _x) { x = _x; }
     void setY(int _y) { y = _y; }
+    */
 
     // cell destructor
     ~Cell() = default;
@@ -97,6 +99,7 @@ public:
         return os;
     }
 
+    /*
     // window width setter
     void setWidth(int _width) {
         window.setSize(sf::Vector2u(_width, window.getSize().y));
@@ -106,6 +109,7 @@ public:
     void setHeight(int _height) {
         window.setSize(sf::Vector2u(window.getSize().x, _height));
     }
+    */
 
     // window getter
     sf::RenderWindow* getWindow() {
