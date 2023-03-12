@@ -11,6 +11,14 @@
 #include <iostream>
 #include <vector>
 
+enum class Direction {
+    NONE,
+    Up,
+    Down,
+    Left,
+    Right
+};
+
 // A cell on the screen
 class Cell {
 private:
@@ -30,6 +38,21 @@ public:
         cellSize = other.cellSize;
         return *this;
     }
+
+    // cell getters
+    int getX() { return x; }
+    int getY() { return y; }
+    int getCellSize() { return cellSize; }
+
+    // cell setter
+    void set(Cell &other) {
+        x = other.x;
+        y = other.y;
+        cellSize = other.cellSize;
+    }
+
+    void setX(int _x) { x = _x; }
+    void setY(int _y) { y = _y; }
 
     // cell destructor
     ~Cell() {}
@@ -85,10 +108,106 @@ class Snake {
 private:
     // snake data
     std::vector<Cell> body;
+    int speed, score;
+    bool lost;
+    Direction dir;
 public:
     // snake constructors
-    Snake() { body.resize(3); }
+    Snake() { reset(); }
     explicit Snake(const std::vector<Cell>& _body) : body(_body) {}
+
+    // reset snake
+    void reset() {
+        body.clear();
+        body.push_back(Cell(5, 7));
+        body.push_back(Cell(5, 6));
+        body.push_back(Cell(5, 5));
+
+        setDirection(Direction::NONE); // snake direction is still
+        speed = 15;
+        score = 0;
+        lost = false;
+    }
+
+    // snake direciton setter
+    void setDirection(Direction _dir) { dir = _dir; }
+
+    // snake direction getter
+    Direction getDirection() { return dir; }
+
+    // snake get speed
+    int getSpeed() { return speed; }
+
+    // get snake score
+    int getScore() { return score; }
+
+    // snake lost
+    bool hasLost() { return lost; }
+
+    // increase score
+    void increaseScore() { score++; }
+
+    // snake has lost
+    void lose() { lost = true; }
+
+    // extend the snake
+    void extend() {
+        if (body.empty())
+            return;
+        Cell& tailHead = body[body.size() - 1];
+        if (body.size() > 1) {
+            Cell& tailBone = body[body.size() - 2];
+            if (tailHead.getX() == tailBone.getX()) {
+                if (tailHead.getY() > tailBone.getY()) {
+                    body.push_back(Cell(tailHead.getX(), tailHead.getY() + 1));
+                }
+                else {
+                    body.push_back(Cell(tailHead.getX(), tailHead.getY() - 1));
+                }
+            }
+            else if (tailHead.getY() == tailBone.getY()) {
+                if (tailHead.getX() > tailBone.getX()) {
+                    body.push_back(Cell(
+                            tailHead.getX() + 1, tailHead.getY()));
+                }
+                else {
+                    body.push_back(Cell(
+                            tailHead.getX() - 1, tailHead.getY()));
+                }
+            }
+        }
+        else {
+            if (dir == Direction::Up) {
+                body.push_back(Cell(
+                        tailHead.getX(), tailHead.getY() + 1));
+            }
+            else if (dir == Direction::Down) {
+                body.push_back(Cell(
+                        tailHead.getX(), tailHead.getY() - 1));
+            }
+            else if (dir == Direction::Left) {
+                body.push_back(Cell(
+                        tailHead.getX() + 1, tailHead.getY()));
+            }
+            else if (dir == Direction::Right) {
+                body.push_back(Cell(
+                        tailHead.getX() - 1, tailHead.getY()));
+            }
+        }
+    }
+
+    void move() {
+        for (int i = body.size() - 1; i > 0; --i)
+            body[i] = body[i - 1];
+        if (dir == Direction::Left)
+            body[0].setX(body[0].getX() - 1);
+        else if (dir == Direction::Right)
+            body[0].setX(body[0].getX() + 1);
+        else if (dir == Direction::Up)
+            body[0].setY(body[0].getY() - 1);
+        else if (dir == Direction::Down)
+            body[0].setY(body[0].getY() + 1);
+    }
 
     // snake operator<<
     friend std::ostream& operator<<(std::ostream& os, const Snake& snake) {
@@ -147,6 +266,9 @@ public:
     sf::RenderWindow* getWindow() {
         return window.getWindow();
     }
+
+    // game destructor
+    ~Game() {}
 };
 
 int main() {
@@ -156,9 +278,9 @@ int main() {
 
     Game game;
     while (game.getWindow()->isOpen()) {
-        // game.handleInput();
-        // game.update();
-        // game.render();
+         // game.handleInput();
+         // game.update();
+         // game.render();
     }
     return 0;
 }
