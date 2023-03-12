@@ -45,7 +45,7 @@ public:
     int getCellSize() { return cellSize; }
 
     // cell setter
-    void set(Cell &other) {
+    void set(const Cell &other) {
         x = other.x;
         y = other.y;
         cellSize = other.cellSize;
@@ -178,7 +178,6 @@ private:
 public:
     // snake constructors
     Snake() { reset(); }
-    explicit Snake(const std::vector<Cell>& _body) : body(_body) {}
 
     // reset snake
     void reset() {
@@ -218,7 +217,7 @@ public:
     void extend() {
         if (body.empty())
             return;
-        Cell& tailHead = body[body.size() - 1];
+        const Cell& tailHead = body[body.size() - 1];
         if (body.size() > 1) {
             Cell& tailBone = body[body.size() - 2];
             if (tailHead.getX() == tailBone.getX()) {
@@ -277,8 +276,8 @@ public:
         if (body.size() <= 1) {
             return Direction::NONE;
         }
-        Cell& head = body[0];
-        Cell& neck = body[1];
+        const Cell& head = body[0];
+        const Cell& neck = body[1];
         if (head.getX() == neck.getX()) {
             return (head.getY() > neck.getY()
                     ? Direction::Down : Direction::Up);
@@ -350,7 +349,7 @@ private:
 public:
     // game constructors
     Game() = default;
-    Game(const World &_world) : world(_world) {}
+    explicit Game(const World &_world) : world(_world) {}
 
     // game operator<<
     friend std::ostream& operator<<(std::ostream& os, const Game& game) {
