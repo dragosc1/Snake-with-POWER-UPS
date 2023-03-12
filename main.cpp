@@ -26,7 +26,7 @@ private:
     int x, y, cellSize;
 public:
     // cell constructor
-    Cell(int _x = 0, int _y = 0, int _cS = 16) : x(_x), y(_y), cellSize(_cS) {}
+    explicit Cell(int _x = 0, int _y = 0, int _cS = 16) : x(_x), y(_y), cellSize(_cS) {}
 
     // cell copy constructor
     Cell(const Cell& other) : x(other.x), y(other.y), cellSize(other.cellSize) {}
@@ -40,8 +40,8 @@ public:
     }
 
     // cell getters
-    int getX() { return x; }
-    int getY() { return y; }
+    int getX() const { return x; }
+    int getY() const { return y; }
     int getCellSize() { return cellSize; }
 
     // cell setter
@@ -55,7 +55,7 @@ public:
     void setY(int _y) { y = _y; }
 
     // cell destructor
-    ~Cell() {}
+    ~Cell() = default;
 
     // cell operator<<
     friend std::ostream& operator<<(std::ostream& os, const Cell& cell) {
@@ -68,53 +68,103 @@ public:
 class GameWindow {
 private:
     // window data
-    sf::RenderWindow *window;
+    sf::RenderWindow window;
+    bool isdone, isFullscreen;
+    sf::Vector2u windowSize;
+    std::string windowTitle;
 public:
     // window constructor
     GameWindow(int _width = 1920, int _height = 1080) {
-        window = new sf::RenderWindow(sf::VideoMode(_width, _height), "Snake", sf::Style::Default);
+        setup("Snake", sf::Vector2u(_width, _height));
+        window.setFramerateLimit(60);
+    }
+
+    // window setup
+    void setup(const std::string& title, const sf::Vector2u& size) {
+        windowTitle = title;
+        windowSize = size;
+        isFullscreen = false;
+        isdone = false;
+        create();
+    }
+
+    // window create
+    void create() {
+        auto style = (isFullscreen ? sf::Style::Fullscreen : sf::Style::Default);
+        window.create({ windowSize.x, windowSize.y, 32 }, windowTitle, style);
+    }
+
+    // destroy window
+    void destroy() {
+        window.close();
     }
 
     // window operator<<
     friend std::ostream& operator<<(std::ostream& os, const GameWindow& _gameWindow) {
-        os << "Window dimensions: " << _gameWindow.window->getSize().x << 'x' << _gameWindow.window->getSize().y << '\n';
+        os << "Window dimensions: " << _gameWindow.window.getSize().x << 'x' << _gameWindow.window.getSize().y << '\n';
         return os;
     }
 
     // window width setter
     void setWidth(int _width) {
-        window->setSize(sf::Vector2u(_width, window->getSize().y));
+        window.setSize(sf::Vector2u(_width, window.getSize().y));
     }
 
     // window height setter
     void setHeight(int _height) {
-        window->setSize(sf::Vector2u(window->getSize().x, _height));
+        window.setSize(sf::Vector2u(window.getSize().x, _height));
     }
 
     // window getter
     sf::RenderWindow* getWindow() {
-        return window;
-    }
-
-    // window copy constructor
-    GameWindow(const GameWindow &other) {
-        window = other.window;
+        return &window;
     }
 
     // window begin draw
     void beginDraw() {
-        window->clear(sf::Color::Black);
+        window.clear(sf::Color::Black);
     }
 
     // window end draw
     void endDraw() {
-        window->display();
+        window.display();
     }
 
     // window draw
     void draw(sf::Drawable& drawable) {
-        window->draw(drawable);
+        window.draw(drawable);
     }
+
+    // window update
+    void update() {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                isdone = true;
+            }
+            else if (event.type == sf::Event::KeyPressed &&
+                     event.key.code == sf::Keyboard::F5) {
+                toggleFullscreen();
+            }
+        }
+    }
+
+    bool isDone() {
+        return isdone;
+    }
+
+    // window destructor
+    ~GameWindow() {
+        destroy();
+    }
+
+    // toggle fullscreen
+    void toggleFullscreen() {
+        isFullscreen = !isFullscreen;
+        destroy();
+        create();
+    }
+
 };
 
 // The snake
@@ -223,6 +273,23 @@ public:
             body[0].setY(body[0].getY() + 1);
     }
 
+    Direction getPhysicalDirection() {
+        if (body.size() <= 1) {
+            return Direction::NONE;
+        }
+        Cell& head = body[0];
+        Cell& neck = body[1];
+        if (head.getX() == neck.getX()) {
+            return (head.getY() > neck.getY()
+                    ? Direction::Down : Direction::Up);
+        }
+        else if (head.getY() == neck.getY()) {
+            return (head.getX() > neck.getX()
+                    ? Direction::Right : Direction::Left);
+        }
+        return Direction::NONE;
+    }
+
     // snake operator<<
     friend std::ostream& operator<<(std::ostream& os, const Snake& snake) {
         os << "Snake cells:\n";
@@ -263,6 +330,10 @@ public:
         _window->draw(appleShape);
     }
 
+    Snake getSnake() {
+        return snake;
+    }
+
     // world destructor
     ~World() {}
 };
@@ -273,10 +344,13 @@ private:
     // game data
     World world;
     GameWindow window;
+    float timespent = 0, timestep = 750;
+    sf::Clock clock;
+    sf::Time elapsed;
 public:
     // game constructors
     Game() = default;
-    Game(const World &_world, const GameWindow &_window) : world(_world), window(_window) {}
+    Game(const World &_world) : world(_world) {}
 
     // game operator<<
     friend std::ostream& operator<<(std::ostream& os, const Game& game) {
@@ -295,11 +369,48 @@ public:
         return window.getWindow();
     }
 
+    GameWindow* getWindow2() {
+        return &window;
+    }
+
     // render game
     void render() {
         window.beginDraw();
         world.render(window.getWindow());
         window.endDraw();
+    }
+
+    // handle the input
+    void handleInput() {
+        window.update();
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)
+            && world.getSnake().getPhysicalDirection() != Direction::Down) {
+            world.getSnake().setDirection(Direction::Up);
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)
+                 && world.getSnake().getPhysicalDirection() != Direction::Up) {
+            world.getSnake().setDirection(Direction::Down);
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)
+                 && world.getSnake().getPhysicalDirection() != Direction::Right) {
+            world.getSnake().setDirection(Direction::Left);
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)
+                 && world.getSnake().getPhysicalDirection() != Direction::Left) {
+            world.getSnake().setDirection(Direction::Right);
+        }
+    }
+
+    // game update
+    void update() {
+        window.update(); // Update window events.
+        if (timespent >= timestep) {
+            if (world.getSnake().hasLost()) {
+                world.getSnake().reset();
+            }
+            timespent = 0;
+        }
+        else timespent++;
     }
 
     // game destructor
@@ -312,9 +423,10 @@ int main() {
     #endif
 
     Game game;
-    while (game.getWindow()->isOpen()) {
-         // game.handleInput();
-         // game.update();
+    std::cout << game;
+    while (!game.getWindow2()->isDone()) {
+          game.handleInput();
+          game.update();
           game.render();
     }
     return 0;
