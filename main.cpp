@@ -38,6 +38,9 @@ public:
         return *this;
     }
 
+    // cell operator==
+    bool operator== (const Cell& other) { return (x == other.x && y == other.y); }
+
     std::pair<int, int> position() {
         return {x, y};
     }
@@ -116,7 +119,7 @@ public:
     }
 
     // window draw
-    void draw(sf::Drawable& drawable) {
+    void draw(const sf::Drawable& drawable) {
         window.draw(drawable);
     }
 
@@ -177,11 +180,12 @@ public:
 
         setDirection(Direction::NONE); // snake direction is still
         score = 0;
+        speed = 1;
         lost = false;
     }
 
     // snake direciton setter
-    void setDirection(Direction _dir) { dir = _dir; }
+    void setDirection(const Direction &_dir) { dir = _dir; }
 
     // snake lost
     bool hasLost() { return lost; }
@@ -191,6 +195,9 @@ public:
 
     // snake get speed
     int getSpeed() { return speed; }
+
+    // snake get position
+    Cell getPosition() { return body[0]; }
 
    // get snake score
    int getScore() { return score; }
@@ -209,12 +216,10 @@ public:
        if (body.size() > 1) {
            Cell& tailBone = body[body.size() - 2];
            if (tailHead.getX() == tailBone.getX()) {
-               if (tailHead.getY() > tailBone.getY()) {
+               if (tailHead.getY() > tailBone.getY())
                    body.push_back(Cell(tailHead.getX(), tailHead.getY() + 1));
-               }
-               else {
+               else
                    body.push_back(Cell(tailHead.getX(), tailHead.getY() - 1));
-               }
            }
            else if (tailHead.getY() == tailBone.getY()) {
                if (tailHead.getX() > tailBone.getX()) {
@@ -261,19 +266,10 @@ public:
    }
 
     Direction getPhysicalDirection() {
-        if (body.size() <= 1) {
-            return Direction::NONE;
-        }
         const Cell& head = body[0];
         const Cell& neck = body[1];
-        if (head.getX() == neck.getX()) {
-            return (head.getY() > neck.getY()
-                    ? Direction::Down : Direction::Up);
-        }
-        else if (head.getY() == neck.getY()) {
-            return (head.getX() > neck.getX()
-                    ? Direction::Right : Direction::Left);
-        }
+        if (head.getX() == neck.getX()) { return (head.getY() > neck.getY() ? Direction::Down : Direction::Up); }
+        else if (head.getY() == neck.getY()) { return (head.getX() > neck.getX() ? Direction::Right : Direction::Left); }
         return Direction::NONE;
     }
 
@@ -298,8 +294,7 @@ public:
         Cell& head = body.front();
         for (auto itr = body.begin() + 1; itr != body.end(); ++itr)
             if (itr->position() == head.position()) {
-                int segments = body.end() - itr;
-                reset();
+                lose();
                 break;
             }
     }
@@ -309,7 +304,7 @@ public:
         if (body.empty()) { return; }
         auto head = body.begin();
         sf::RectangleShape bodyRect;
-        bodyRect.setFillColor(sf::Color::Green);
+        bodyRect.setFillColor(sf::Color(0, 195, 50));
         bodyRect.setPosition(head->getX() * cellSize,head->getY() * cellSize);
         bodyRect.setSize(sf::Vector2f(cellSize, cellSize));
         _window->draw(bodyRect);
@@ -317,7 +312,6 @@ public:
         for (auto itr = body.begin() + 1; itr != body.end(); ++itr) {
             bodyRect.setPosition(itr->getX() * cellSize,itr->getY() * cellSize);
             _window->draw(bodyRect);
-
         }
     }
 };
@@ -332,6 +326,7 @@ private:
     sf::CircleShape fruitShape;
     sf::Vector2u windowSize;
     int cellSize;
+    Cell fruit;
 public:
     // world constructors
     World() = default;
@@ -340,14 +335,27 @@ public:
         fruitShape.setRadius(8);
         cellSize = 16;
         setRandomFruitPosition();
+        for (int i = 0; i < 4; ++i) {
+            bounds[i].setFillColor(sf::Color(100, 100, 100));
+            if (((i + 1) & 1) == 0) {
+                bounds[i].setSize(sf::Vector2f(windowSize.x, cellSize));
+            }
+            else bounds[i].setSize(sf::Vector2f(cellSize, windowSize.y));
+            if (i < 2) bounds[i].setPosition(0, 0);
+            else {
+                bounds[i].setOrigin(bounds[i].getSize());
+                bounds[i].setPosition(sf::Vector2f(windowSize));
+            }
+        }
     }
     // apple random position
     void setRandomFruitPosition() {
-        int maxX = windowSize.x - 2;
-        int maxY = windowSize.y - 2;
-        int x = 1LL * rand() * rand() % (maxX / cellSize) * cellSize;
-        int y = 1LL * rand() * rand() % (maxY / cellSize) * cellSize;
-        fruitShape.setPosition(sf::Vector2f(x, y));
+        int maxX = (windowSize.x / cellSize) - 2;
+        int maxY = (windowSize.y / cellSize) - 2;
+        int x = 1LL * rand() * rand() % maxX + 1;
+        int y = 1LL * rand() * rand() % maxY + 1;
+        fruit = Cell(x, y);
+        fruitShape.setPosition(sf::Vector2f(x * cellSize, y * cellSize));
     }
     // world operator<<
     friend std::ostream& operator<<(std::ostream& os, const World& world) {
@@ -365,8 +373,23 @@ public:
         _window->draw(fruitShape);
     }
 
-    Snake& getSnake() {
-        return snake;
+    Snake* getSnake() {
+        return &snake;
+    }
+
+    void update(Snake* _snake) {
+        if (_snake->getPosition() == fruit) {
+            _snake->extend();
+            _snake->increaseScore();
+            setRandomFruitPosition();
+        }
+        int gridSize_x = windowSize.x / cellSize;
+        int gridSize_y = windowSize.y / cellSize;
+        if (_snake->getPosition().getX() <= 0 ||
+            _snake->getPosition().getY() <= 0 ||
+            _snake->getPosition().getX() >= (gridSize_x - 1) ||
+            _snake->getPosition().getY() >= (gridSize_y - 1))
+            _snake->lose();
     }
 
     // world destructor
@@ -379,12 +402,25 @@ private:
     // game data
     World world;
     GameWindow window;
-    float timespent = 0, timestep = 750;
-    sf::Clock clock;
-    sf::Time elapsed;
+    float timespent = 0, timestep = 10;
+    sf::Text score;
+    sf::Font font;
 public:
     // game constructors
-    Game() : world(sf::Vector2u(800, 600)), window() {}
+    Game() : world(sf::Vector2u(800, 600)), window() {
+        font.loadFromFile("arial.ttf");
+        score.setFont(font);
+        score.setString("Score: ");
+        score.setPosition(sf::Vector2f(700, 16));
+        score.setCharacterSize(20);
+        score.setFillColor(sf::Color::White);
+    }
+
+    // game draw score
+    void drawScore() {
+        score.setString("Score: " + std::to_string(world.getSnake()->getScore()));
+        window.getWindow()->draw(score);
+    }
 
     // game operator<<
     friend std::ostream& operator<<(std::ostream& os, const Game& game) {
@@ -404,8 +440,9 @@ public:
     // render game
     void render() {
         window.beginDraw();
+        drawScore();
         world.render(window.getWindow());
-        world.getSnake().render(window.getWindow());
+        world.getSnake()->render(window.getWindow());
         window.endDraw();
     }
 
@@ -413,20 +450,20 @@ public:
     void handleInput() {
         window.update();
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)
-            && world.getSnake().getPhysicalDirection() != Direction::Down) {
-            world.getSnake().setDirection(Direction::Up);
+            && world.getSnake()->getPhysicalDirection() != Direction::Down) {
+            world.getSnake()->setDirection(Direction::Up);
         }
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)
-                 && world.getSnake().getPhysicalDirection() != Direction::Up) {
-            world.getSnake().setDirection(Direction::Down);
+                 && world.getSnake()->getPhysicalDirection() != Direction::Up) {
+            world.getSnake()->setDirection(Direction::Down);
         }
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)
-                 && world.getSnake().getPhysicalDirection() != Direction::Right) {
-            world.getSnake().setDirection(Direction::Left);
+                 && world.getSnake()->getPhysicalDirection() != Direction::Right) {
+            world.getSnake()->setDirection(Direction::Left);
         }
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)
-                 && world.getSnake().getPhysicalDirection() != Direction::Left) {
-            world.getSnake().setDirection(Direction::Right);
+                 && world.getSnake()->getPhysicalDirection() != Direction::Left) {
+            world.getSnake()->setDirection(Direction::Right);
         }
     }
 
@@ -434,12 +471,15 @@ public:
     void update() {
         window.update(); // Update window events.
         if (timespent >= timestep) {
-            if (world.getSnake().hasLost()) {
-                world.getSnake().reset();
+            world.getSnake()->tick();
+            world.update(world.getSnake());
+            if (world.getSnake()->hasLost()) {
+                world.getSnake()->reset();
+                world.setRandomFruitPosition();
             }
             timespent = 0;
         }
-        else timespent++;
+        else timespent += world.getSnake()->getSpeed();
     }
 
     // game destructor
@@ -447,10 +487,11 @@ public:
 };
 
 int main() {
-    srand(time(0));
     #ifdef __linux__
     XInitThreads();
     #endif
+
+    srand(time(NULL));
 
     Game game;
     while (!game.getWindow2()->isDone()) {
