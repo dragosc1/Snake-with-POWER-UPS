@@ -168,7 +168,7 @@ private:
     int cellSize;
 public:
     // snake constructors
-    Snake(const int& _cellSize) : cellSize(_cellSize) {
+    explicit Snake(const int& _cellSize) : cellSize(_cellSize) {
         reset();
     }
     // reset snake
@@ -189,9 +189,6 @@ public:
 
     // snake lost
     bool hasLost() { return lost; }
-
-    // snake direction getter
-    Direction getDirection() { return dir; }
 
     // snake get speed
     int getSpeed() { return speed; }
@@ -330,7 +327,7 @@ private:
 public:
     // world constructors
     World() = default;
-    World(const sf::Vector2u& _windowSize) : windowSize(_windowSize), snake(cellSize = 16) {
+    explicit World(const sf::Vector2u& _windowSize) : windowSize(_windowSize), snake(cellSize = 16) {
         fruitShape.setFillColor(sf::Color::Red);
         fruitShape.setRadius(8);
         cellSize = 16;
