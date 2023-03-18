@@ -1,12 +1,5 @@
-#include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <chrono>
-
-#ifdef __linux__
-#include <X11/Xlib.h>
-#endif
-
 
 enum class Direction {
     NONE,
@@ -98,6 +91,8 @@ public:
     // window operator<<
     friend std::ostream& operator<<(std::ostream& os, const GameWindow& _gameWindow) {
         os << "Window dimensions: " << _gameWindow.window.getSize().x << 'x' << _gameWindow.window.getSize().y << '\n';
+        os << "Window title: " << _gameWindow.windowTitle << '\n';
+        os << "Window fullScreen: " << (_gameWindow.isFullscreen ? "Yes\n" : "No\n");
         return os;
     }
 
@@ -269,6 +264,8 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Snake& snake) {
         os << "Snake cells:\n";
         for (const Cell& cell : snake.body) os << cell << '\n';
+        os << "Snake speed: " << snake.speed << '\n';
+        os << "Snake score: " << snake.score << "\n\n";
         return os;
     }
 
@@ -375,9 +372,10 @@ public:
 
     // world operator<<
     friend std::ostream& operator<<(std::ostream& os, const World& world) {
-        os << world.snake << '\n' << "Fruit:\t" << "X=" << world.fruitShape.getPosition().x << "; Y=" << world.fruitShape.getPosition().y << '\n';
-        os << "PowerUps available:\n\n";
-        os << world.slowTime << '\n';
+        os << world.snake << "Fruit:\t" << "X=" << world.fruitShape.getPosition().x << "; Y=" << world.fruitShape.getPosition().y << '\n';
+        os << "PowerUps available:\n";
+        os << "Slow time:\t" << "X=" << world.slowTimeShape.getPosition().x << "; Y=" << world.slowTimeShape.getPosition().y << "\n\n";
+        os << "Cell size: " << world.cellSize << '\n';
         return os;
     }
 
@@ -447,7 +445,7 @@ public:
 
     // game operator<<
     friend std::ostream& operator<<(std::ostream& os, const Game& game) {
-        os << game.world << game.window;
+        os << game.world << game.window << "Time spent: " << game.timespent << '\n' << "Time step: " << game.timestep << '\n';
         return os;
     }
 
@@ -510,13 +508,11 @@ public:
 };
 
 int main() {
-    #ifdef __linux__
-    XInitThreads();
-    #endif
-
     srand(time(NULL));
 
     Game game;
+    std::cout << "GAME INFO:\n\n";
+    std::cout << game;
     while (!game.getWindow2()->isDone()) {
         game.handleInput();
         game.update();
