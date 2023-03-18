@@ -49,6 +49,7 @@ public:
     int getX() const { return x; }
     int getY() const { return y; }
 
+    // cell setters
     void setX(int _x) { x = _x; }
     void setY(int _y) { y = _y; }
 
@@ -161,7 +162,8 @@ class Snake {
 private:
     // snake data
     std::vector<Cell> body;
-    int speed, score;
+    float speed;
+    int score, speedTime;
     bool lost;
     Direction dir;
     sf::Vector2u windowSize;
@@ -181,6 +183,7 @@ public:
         setDirection(Direction::NONE); // snake direction is still
         score = 0;
         speed = 1;
+        speedTime = 1e9;
         lost = false;
     }
 
@@ -191,7 +194,7 @@ public:
     bool hasLost() { return lost; }
 
     // snake get speed
-    int getSpeed() { return speed; }
+    float getSpeed() { return speed; }
 
     // snake get position
     Cell getPosition() { return body[0]; }
@@ -220,35 +223,30 @@ public:
            }
            else if (tailHead.getY() == tailBone.getY()) {
                if (tailHead.getX() > tailBone.getX()) {
-                   body.push_back(Cell(
-                           tailHead.getX() + 1, tailHead.getY()));
+                   body.push_back(Cell(tailHead.getX() + 1, tailHead.getY()));
                }
                else {
-                   body.push_back(Cell(
-                           tailHead.getX() - 1, tailHead.getY()));
+                   body.push_back(Cell(tailHead.getX() - 1, tailHead.getY()));
                }
            }
        }
        else {
            if (dir == Direction::Up) {
-               body.push_back(Cell(
-                       tailHead.getX(), tailHead.getY() + 1));
+               body.push_back(Cell(tailHead.getX(), tailHead.getY() + 1));
            }
            else if (dir == Direction::Down) {
-               body.push_back(Cell(
-                       tailHead.getX(), tailHead.getY() - 1));
+               body.push_back(Cell(tailHead.getX(), tailHead.getY() - 1));
            }
            else if (dir == Direction::Left) {
-               body.push_back(Cell(
-                       tailHead.getX() + 1, tailHead.getY()));
+               body.push_back(Cell(tailHead.getX() + 1, tailHead.getY()));
            }
            else if (dir == Direction::Right) {
-               body.push_back(Cell(
-                       tailHead.getX() - 1, tailHead.getY()));
+               body.push_back(Cell(tailHead.getX() - 1, tailHead.getY()));
            }
        }
    }
 
+   // snake move
    void move() {
        for (int i = body.size() - 1; i > 0; --i)
            body[i] = body[i - 1];
@@ -262,6 +260,7 @@ public:
            body[0].setY(body[0].getY() + 1);
    }
 
+   // get physicial direction
     Direction getPhysicalDirection() {
         const Cell& head = body[0];
         const Cell& neck = body[1];
@@ -281,6 +280,9 @@ public:
     void tick() {
         if (body.empty()) { return; }
         if (dir == Direction::NONE) { return; }
+        speedTime--;
+        if (speedTime == 0)
+            speed = 1;
         move();
         checkCollision();
     }
@@ -294,6 +296,13 @@ public:
                 lose();
                 break;
             }
+    }
+
+    // slow time
+    void slowTime() {
+        speed = speed * 1.0 / 2;
+        speedTime = 30;
+        std::cout << speed << '\n';
     }
 
     // snake render
@@ -318,7 +327,8 @@ class World {
 private:
     // world data
     Snake snake;
-    std::vector<Cell> powerUps;
+    sf::CircleShape slowTimeShape;
+    Cell slowTime;
     sf::RectangleShape bounds[4];
     sf::CircleShape fruitShape;
     sf::Vector2u windowSize;
@@ -329,8 +339,11 @@ public:
     explicit World(const sf::Vector2u& _windowSize) : snake(cellSize = 16), windowSize(_windowSize) {
         fruitShape.setFillColor(sf::Color::Red);
         fruitShape.setRadius(8);
-        cellSize = 16;
         setRandomFruitPosition();
+        slowTimeShape.setFillColor(sf::Color::Blue);
+        slowTimeShape.setRadius(8);
+        setRandomSlowTimePosition();
+        cellSize = 16;
         for (int i = 0; i < 4; ++i) {
             bounds[i].setFillColor(sf::Color(100, 100, 100));
             if (((i + 1) & 1) == 0) {
@@ -344,7 +357,8 @@ public:
             }
         }
     }
-    // apple random position
+
+    // fruit random position
     void setRandomFruitPosition() {
         int maxX = (windowSize.x / cellSize) - 2;
         int maxY = (windowSize.y / cellSize) - 2;
@@ -353,27 +367,45 @@ public:
         fruit = Cell(x, y);
         fruitShape.setPosition(sf::Vector2f(x * cellSize, y * cellSize));
     }
+
+    // fruit random position
+    void setRandomSlowTimePosition() {
+        int maxX = (windowSize.x / cellSize) - 2;
+        int maxY = (windowSize.y / cellSize) - 2;
+        int x = 1LL * rand() * rand() % maxX + 1;
+        int y = 1LL * rand() * rand() % maxY + 1;
+        slowTime = Cell(x, y);
+        slowTimeShape.setPosition(sf::Vector2f(x * cellSize, y * cellSize));
+    }
+
     // world operator<<
     friend std::ostream& operator<<(std::ostream& os, const World& world) {
         os << world.snake << '\n' << "Fruit:\t" << "X=" << world.fruitShape.getPosition().x << "; Y=" << world.fruitShape.getPosition().y << '\n';
-        std::cout << "PowerUps available:\n\n";
-        for (Cell cell : world.powerUps)
-            std::cout << cell << '\n';
+        os << "PowerUps available:\n\n";
+        os << world.slowTime << '\n';
         return os;
     }
 
+    // window render bounds
     void render(sf::RenderWindow* _window) {
         for (int i = 0; i < 4; ++i) {
             _window->draw(bounds[i]);
         }
         _window->draw(fruitShape);
+        _window->draw(slowTimeShape);
     }
 
+    // get snake
     Snake* getSnake() {
         return &snake;
     }
 
+    // update snake
     void update(Snake* _snake) {
+        if (_snake->getPosition() == slowTime) {
+            _snake->slowTime();
+            setRandomSlowTimePosition();
+        }
         if (_snake->getPosition() == fruit) {
             _snake->extend();
             _snake->increaseScore();
