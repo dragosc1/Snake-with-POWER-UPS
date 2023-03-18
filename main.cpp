@@ -166,7 +166,6 @@ private:
     int score, speedTime;
     bool lost;
     Direction dir;
-    sf::Vector2u windowSize;
     int cellSize;
 public:
     // snake constructors
