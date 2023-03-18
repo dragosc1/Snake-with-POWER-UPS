@@ -302,7 +302,6 @@ public:
     void slowTime() {
         speed = speed * 1.0 / 2;
         speedTime = 30;
-        std::cout << speed << '\n';
     }
 
     // snake render
