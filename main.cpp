@@ -39,7 +39,7 @@ public:
     }
 
     // cell operator==
-    bool operator== (const Cell& other) { return (x == other.x && y == other.y); }
+    bool operator== (const Cell& other) const { return (x == other.x && y == other.y); }
 
     std::pair<int, int> position() {
         return {x, y};
@@ -326,8 +326,7 @@ private:
     Cell fruit;
 public:
     // world constructors
-    World() = default;
-    explicit World(const sf::Vector2u& _windowSize) : windowSize(_windowSize), snake(cellSize = 16) {
+    explicit World(const sf::Vector2u& _windowSize) : snake(cellSize = 16), windowSize(_windowSize) {
         fruitShape.setFillColor(sf::Color::Red);
         fruitShape.setRadius(8);
         cellSize = 16;
