@@ -504,7 +504,7 @@ public:
                 world.getSnake()->reset();
                 world.setRandomFruitPosition();
             }
-            timespent = 0;
+            timespent = 0.f;
         }
         else timespent += world.getSnake()->getSpeed();
     }
