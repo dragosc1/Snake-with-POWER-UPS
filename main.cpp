@@ -2,14 +2,11 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <chrono>
-#include <thread>
 
 #ifdef __linux__
 #include <X11/Xlib.h>
 #endif
 
-#include <iostream>
-#include <vector>
 
 enum class Direction {
     NONE,
