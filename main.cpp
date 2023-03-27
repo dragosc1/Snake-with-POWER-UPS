@@ -67,24 +67,9 @@ class GameWindow {
 private:
     // window data
     sf::RenderWindow window;
-    bool isdone, isFullscreen;
+    bool isclosed, isFullscreen;
     sf::Vector2u windowSize;
     std::string windowTitle;
-public:
-    // window constructor
-    GameWindow(int width_ = 800, int height_ = 600) {
-        setup("Snake", sf::Vector2u(width_, height_));
-        window.setFramerateLimit(60);
-    }
-
-    // window setup
-    void setup(const std::string& title, const sf::Vector2u& size) {
-        windowTitle = title;
-        windowSize = size;
-        isFullscreen = false;
-        isdone = false;
-        create();
-    }
 
     // window create
     void create() {
@@ -95,6 +80,21 @@ public:
     // destroy window
     void destroy() {
         window.close();
+    }
+
+    // window setup
+    void setup(const std::string& title, const sf::Vector2u& size) {
+        windowTitle = title;
+        windowSize = size;
+        isFullscreen = false;
+        isclosed = false;
+        create();
+    }
+public:
+    // window constructor
+    GameWindow(int width_ = 800, int height_ = 600) {
+        setup("Snake", sf::Vector2u(width_, height_));
+        window.setFramerateLimit(60);
     }
 
     // window operator<<
@@ -130,7 +130,7 @@ public:
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
-                isdone = true;
+                isclosed = true;
             }
             else if (event.type == sf::Event::KeyPressed &&
                      event.key.code == sf::Keyboard::F5) {
@@ -139,8 +139,8 @@ public:
         }
     }
 
-    bool isDone() {
-        return isdone;
+    bool isClosed() {
+        return isclosed;
     }
 
     // window destructor
@@ -210,8 +210,6 @@ public:
 
    // extend the snake
    void extend() {
-       if (body.empty())
-           return;
        const Cell& tailHead = body[body.size() - 1];
        if (body.size() > 1) {
            Cell& tailBone = body[body.size() - 2];
@@ -528,7 +526,7 @@ int main() {
     Game game;
     std::cout << "GAME INFO:\n\n";
     std::cout << game;
-    while (!game.getWindow2()->isDone()) {
+    while (!game.getWindow2()->isClosed()) {
         game.handleInput();
         game.update();
         game.render();
