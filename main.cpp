@@ -283,10 +283,20 @@ public:
         if (body.empty()) { return; }
         if (dir == Direction::NONE) { return; }
         speedTime--;
-        if (speedTime == 0)
+        if (speedTime == 0) {
             speed = 1;
+            speedTime = 1e9;
+        }
         move();
         checkCollision();
+    }
+
+    // snake out of bounds
+    bool outOfBounds(const sf::Vector2u &windowSize) {
+        int gridSize_x = windowSize.x / cellSize;
+        int gridSize_y = windowSize.y / cellSize;
+        return (body[0].getX() <= 0 || body[0].getY() <= 0 ||
+               body[0].getX() >= (gridSize_x - 1) || body[0].getY() >= (gridSize_y - 1));
     }
 
     // snake check collision
@@ -373,8 +383,8 @@ public:
     void setRandomSlowTimePosition() {
         int maxX = (windowSize.x / cellSize) - 2;
         int maxY = (windowSize.y / cellSize) - 2;
-        int x = 1LL * rand() * rand() % maxX + 1;
-        int y = 1LL * rand() * rand() % maxY + 1;
+        int x = rand() % maxX + 1;
+        int y = rand() % maxY + 1;
         slowTime = Cell(x, y);
         slowTimeShape.setPosition(sf::Vector2f(x * cellSize, y * cellSize));
     }
@@ -403,23 +413,18 @@ public:
     }
 
     // update snake
-    void update(Snake* snake_) {
-        if (snake_->getPosition() == slowTime) {
-            snake_->slowTime();
+    void update() {
+        if (snake.getPosition() == slowTime) {
+            snake.slowTime();
             setRandomSlowTimePosition();
         }
-        if (snake_->getPosition() == fruit) {
-            snake_->extend();
-            snake_->increaseScore();
+        if (snake.getPosition() == fruit) {
+            snake.extend();
+            snake.increaseScore();
             setRandomFruitPosition();
         }
-        int gridSize_x = windowSize.x / cellSize;
-        int gridSize_y = windowSize.y / cellSize;
-        if (snake_->getPosition().getX() <= 0 ||
-            snake_->getPosition().getY() <= 0 ||
-            snake_->getPosition().getX() >= (gridSize_x - 1) ||
-            snake_->getPosition().getY() >= (gridSize_y - 1))
-            snake_->lose();
+        if (snake.outOfBounds(windowSize))
+            snake.lose();
     }
 
     // world destructor
@@ -502,10 +507,11 @@ public:
         window.update(); // Update window events.
         if (timespent >= timestep) {
             world.getSnake()->tick();
-            world.update(world.getSnake());
+            world.update();
             if (world.getSnake()->hasLost()) {
                 world.getSnake()->reset();
                 world.setRandomFruitPosition();
+                world.setRandomSlowTimePosition();
             }
             timespent = 0.f;
         }
