@@ -16,7 +16,7 @@ private:
     int x, y;
 public:
     // cell constructor
-    explicit Cell(int _x = 0, int _y = 0) : x(_x), y(_y) {}
+    explicit Cell(int x_ = 0, int y_ = 0) : x(x_), y(y_) {}
 
     // cell copy constructor
     Cell(const Cell& other) : x(other.x), y(other.y) {}
@@ -40,8 +40,8 @@ public:
     int getY() const { return y; }
 
     // cell setters
-    void setX(int _x) { x = _x; }
-    void setY(int _y) { y = _y; }
+    void setX(int x_) { x = x_; }
+    void setY(int y_) { y = y_; }
 
     // cell destructor
     ~Cell() = default;
@@ -63,8 +63,8 @@ private:
     std::string windowTitle;
 public:
     // window constructor
-    GameWindow(int _width = 800, int _height = 600) {
-        setup("Snake", sf::Vector2u(_width, _height));
+    GameWindow(int width_ = 800, int height_ = 600) {
+        setup("Snake", sf::Vector2u(width_, height_));
         window.setFramerateLimit(60);
     }
 
@@ -89,10 +89,10 @@ public:
     }
 
     // window operator<<
-    friend std::ostream& operator<<(std::ostream& os, const GameWindow& _gameWindow) {
-        os << "Window dimensions: " << _gameWindow.window.getSize().x << 'x' << _gameWindow.window.getSize().y << '\n';
-        os << "Window title: " << _gameWindow.windowTitle << '\n';
-        os << "Window fullScreen: " << (_gameWindow.isFullscreen ? "Yes\n" : "No\n");
+    friend std::ostream& operator<<(std::ostream& os, const GameWindow& gameWindow) {
+        os << "Window dimensions: " << gameWindow.window.getSize().x << 'x' << gameWindow.window.getSize().y << '\n';
+        os << "Window title: " << gameWindow.windowTitle << '\n';
+        os << "Window fullScreen: " << (gameWindow.isFullscreen ? "Yes\n" : "No\n");
         return os;
     }
 
@@ -161,7 +161,7 @@ private:
     int cellSize;
 public:
     // snake constructors
-    explicit Snake(const int& _cellSize) : cellSize(_cellSize) {
+    explicit Snake(const int& cellSize_) : cellSize(cellSize_) {
         reset();
     }
     // reset snake
@@ -179,7 +179,7 @@ public:
     }
 
     // snake direciton setter
-    void setDirection(const Direction &_dir) { dir = _dir; }
+    void setDirection(const Direction &dir_) { dir = dir_; }
 
     // snake lost
     bool hasLost() { return lost; }
@@ -298,18 +298,18 @@ public:
     }
 
     // snake render
-    void render(sf::RenderWindow* _window) {
+    void render(sf::RenderWindow* window_) {
         if (body.empty()) { return; }
         auto head = body.begin();
         sf::RectangleShape bodyRect;
         bodyRect.setFillColor(sf::Color(0, 195, 50));
         bodyRect.setPosition(head->getX() * cellSize,head->getY() * cellSize);
         bodyRect.setSize(sf::Vector2f(cellSize, cellSize));
-        _window->draw(bodyRect);
+        window_->draw(bodyRect);
         bodyRect.setFillColor(sf::Color::Green);
         for (auto itr = body.begin() + 1; itr != body.end(); ++itr) {
             bodyRect.setPosition(itr->getX() * cellSize,itr->getY() * cellSize);
-            _window->draw(bodyRect);
+            window_->draw(bodyRect);
         }
     }
 };
@@ -328,7 +328,7 @@ private:
     Cell fruit;
 public:
     // world constructors
-    explicit World(const sf::Vector2u& _windowSize) : snake(cellSize = 16), windowSize(_windowSize) {
+    explicit World(const sf::Vector2u& windowSize_) : snake(cellSize = 16), windowSize(windowSize_) {
         fruitShape.setFillColor(sf::Color::Red);
         fruitShape.setRadius(8);
         setRandomFruitPosition();
@@ -380,12 +380,12 @@ public:
     }
 
     // window render bounds
-    void render(sf::RenderWindow* _window) {
+    void render(sf::RenderWindow* window_) {
         for (int i = 0; i < 4; ++i) {
-            _window->draw(bounds[i]);
+            window_->draw(bounds[i]);
         }
-        _window->draw(fruitShape);
-        _window->draw(slowTimeShape);
+        window_->draw(fruitShape);
+        window_->draw(slowTimeShape);
     }
 
     // get snake
@@ -394,23 +394,23 @@ public:
     }
 
     // update snake
-    void update(Snake* _snake) {
-        if (_snake->getPosition() == slowTime) {
-            _snake->slowTime();
+    void update(Snake* snake_) {
+        if (snake_->getPosition() == slowTime) {
+            snake_->slowTime();
             setRandomSlowTimePosition();
         }
-        if (_snake->getPosition() == fruit) {
-            _snake->extend();
-            _snake->increaseScore();
+        if (snake_->getPosition() == fruit) {
+            snake_->extend();
+            snake_->increaseScore();
             setRandomFruitPosition();
         }
         int gridSize_x = windowSize.x / cellSize;
         int gridSize_y = windowSize.y / cellSize;
-        if (_snake->getPosition().getX() <= 0 ||
-            _snake->getPosition().getY() <= 0 ||
-            _snake->getPosition().getX() >= (gridSize_x - 1) ||
-            _snake->getPosition().getY() >= (gridSize_y - 1))
-            _snake->lose();
+        if (snake_->getPosition().getX() <= 0 ||
+            snake_->getPosition().getY() <= 0 ||
+            snake_->getPosition().getX() >= (gridSize_x - 1) ||
+            snake_->getPosition().getY() >= (gridSize_y - 1))
+            snake_->lose();
     }
 
     // world destructor
