@@ -9,6 +9,15 @@ enum class Direction {
     Right
 };
 
+// constants for colors
+const sf::Color GREEN = sf::Color::Green;
+const sf::Color D_GREEN = sf::Color(0, 195, 50);
+const sf::Color BLACK = sf::Color::Black;
+const sf::Color RED = sf::Color::Red;
+const sf::Color WHITE = sf::Color::White;
+const sf::Color LGRAY = sf::Color(100, 100, 100);
+const sf::Color BLUE = sf::Color::Blue;
+
 // A cell on the screen
 class Cell {
 private:
@@ -103,7 +112,7 @@ public:
 
     // window begin draw
     void beginDraw() {
-        window.clear(sf::Color::Black);
+        window.clear(BLACK);
     }
 
     // window end draw
@@ -302,11 +311,11 @@ public:
         if (body.empty()) { return; }
         auto head = body.begin();
         sf::RectangleShape bodyRect;
-        bodyRect.setFillColor(sf::Color(0, 195, 50));
+        bodyRect.setFillColor(D_GREEN);
         bodyRect.setPosition(head->getX() * cellSize,head->getY() * cellSize);
         bodyRect.setSize(sf::Vector2f(cellSize, cellSize));
         window_->draw(bodyRect);
-        bodyRect.setFillColor(sf::Color::Green);
+        bodyRect.setFillColor(GREEN);
         for (auto itr = body.begin() + 1; itr != body.end(); ++itr) {
             bodyRect.setPosition(itr->getX() * cellSize,itr->getY() * cellSize);
             window_->draw(bodyRect);
@@ -329,15 +338,15 @@ private:
 public:
     // world constructors
     explicit World(const sf::Vector2u& windowSize_) : snake(cellSize = 16), windowSize(windowSize_) {
-        fruitShape.setFillColor(sf::Color::Red);
+        fruitShape.setFillColor(RED);
         fruitShape.setRadius(8);
         setRandomFruitPosition();
-        slowTimeShape.setFillColor(sf::Color::Blue);
+        slowTimeShape.setFillColor(BLUE);
         slowTimeShape.setRadius(8);
         setRandomSlowTimePosition();
         cellSize = 16;
         for (int i = 0; i < 4; ++i) {
-            bounds[i].setFillColor(sf::Color(100, 100, 100));
+            bounds[i].setFillColor(LGRAY);
             if (((i + 1) & 1) == 0) {
                 bounds[i].setSize(sf::Vector2f(windowSize.x, cellSize));
             }
@@ -354,8 +363,8 @@ public:
     void setRandomFruitPosition() {
         int maxX = (windowSize.x / cellSize) - 2;
         int maxY = (windowSize.y / cellSize) - 2;
-        int x = 1LL * rand() * rand() % maxX + 1;
-        int y = 1LL * rand() * rand() % maxY + 1;
+        int x = rand() % maxX + 1;
+        int y = rand() % maxY + 1;
         fruit = Cell(x, y);
         fruitShape.setPosition(sf::Vector2f(x * cellSize, y * cellSize));
     }
@@ -434,7 +443,7 @@ public:
         score.setString("Score: ");
         score.setPosition(sf::Vector2f(700, 16));
         score.setCharacterSize(20);
-        score.setFillColor(sf::Color::White);
+        score.setFillColor(WHITE);
     }
 
     // game draw score
