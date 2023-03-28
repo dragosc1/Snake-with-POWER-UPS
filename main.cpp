@@ -1,14 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-enum class Direction {
-    NONE,
-    Up,
-    Down,
-    Left,
-    Right
-};
-
 // constants for colors
 const sf::Color GREEN = sf::Color::Green;
 const sf::Color D_GREEN = sf::Color(0, 195, 50);
@@ -17,6 +9,14 @@ const sf::Color RED = sf::Color::Red;
 const sf::Color WHITE = sf::Color::White;
 const sf::Color LGRAY = sf::Color(100, 100, 100);
 const sf::Color BLUE = sf::Color::Blue;
+
+enum class Direction {
+    NONE,
+    Up,
+    Down,
+    Left,
+    Right
+};
 
 // A cell on the screen
 class Cell {
@@ -106,8 +106,8 @@ public:
     }
 
     // window getter
-    sf::RenderWindow* getWindow() {
-        return &window;
+    sf::RenderWindow& getWindow() {
+        return window;
     }
 
     // window begin draw
@@ -120,6 +120,10 @@ public:
         window.display();
     }
 
+    void drawScore(const sf::Text& score) {
+        window.draw(score);
+    }
+
     // window draw
     void draw(const sf::Drawable& drawable) {
         window.draw(drawable);
@@ -128,15 +132,11 @@ public:
     // window update
     void update() {
         sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
+        while (window.pollEvent(event))
+            if (event.type == sf::Event::Closed)
                 isclosed = true;
-            }
-            else if (event.type == sf::Event::KeyPressed &&
-                     event.key.code == sf::Keyboard::F5) {
+            else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F5)
                 toggleFullscreen();
-            }
-        }
     }
 
     bool isClosed() {
@@ -199,66 +199,66 @@ public:
     // snake get position
     Cell getPosition() { return body[0]; }
 
-   // get snake score
-   int getScore() { return score; }
+    // get snake score
+    int getScore() { return score; }
 
-   // increase score
-   void increaseScore() { score++; }
+    // increase score
+    void increaseScore() { score++; }
 
-   // snake has lost
-   void lose() { lost = true; }
+    // snake has lost
+    void lose() { lost = true; }
 
-   // extend the snake
-   void extend() {
-       const Cell& tailHead = body[body.size() - 1];
-       if (body.size() > 1) {
-           Cell& tailBone = body[body.size() - 2];
-           if (tailHead.getX() == tailBone.getX()) {
-               if (tailHead.getY() > tailBone.getY())
-                   body.push_back(Cell(tailHead.getX(), tailHead.getY() + 1));
-               else
-                   body.push_back(Cell(tailHead.getX(), tailHead.getY() - 1));
-           }
-           else if (tailHead.getY() == tailBone.getY()) {
-               if (tailHead.getX() > tailBone.getX()) {
-                   body.push_back(Cell(tailHead.getX() + 1, tailHead.getY()));
-               }
-               else {
-                   body.push_back(Cell(tailHead.getX() - 1, tailHead.getY()));
-               }
-           }
-       }
-       else {
-           if (dir == Direction::Up) {
-               body.push_back(Cell(tailHead.getX(), tailHead.getY() + 1));
-           }
-           else if (dir == Direction::Down) {
-               body.push_back(Cell(tailHead.getX(), tailHead.getY() - 1));
-           }
-           else if (dir == Direction::Left) {
-               body.push_back(Cell(tailHead.getX() + 1, tailHead.getY()));
-           }
-           else if (dir == Direction::Right) {
-               body.push_back(Cell(tailHead.getX() - 1, tailHead.getY()));
-           }
-       }
-   }
+    // extend the snake
+    void extend() {
+        const Cell& tailHead = body[body.size() - 1];
+        if (body.size() > 1) {
+            Cell& tailBone = body[body.size() - 2];
+            if (tailHead.getX() == tailBone.getX()) {
+                if (tailHead.getY() > tailBone.getY())
+                    body.push_back(Cell(tailHead.getX(), tailHead.getY() + 1));
+                else
+                    body.push_back(Cell(tailHead.getX(), tailHead.getY() - 1));
+            }
+            else if (tailHead.getY() == tailBone.getY()) {
+                if (tailHead.getX() > tailBone.getX()) {
+                    body.push_back(Cell(tailHead.getX() + 1, tailHead.getY()));
+                }
+                else {
+                    body.push_back(Cell(tailHead.getX() - 1, tailHead.getY()));
+                }
+            }
+        }
+        else {
+            if (dir == Direction::Up) {
+                body.push_back(Cell(tailHead.getX(), tailHead.getY() + 1));
+            }
+            else if (dir == Direction::Down) {
+                body.push_back(Cell(tailHead.getX(), tailHead.getY() - 1));
+            }
+            else if (dir == Direction::Left) {
+                body.push_back(Cell(tailHead.getX() + 1, tailHead.getY()));
+            }
+            else if (dir == Direction::Right) {
+                body.push_back(Cell(tailHead.getX() - 1, tailHead.getY()));
+            }
+        }
+    }
 
-   // snake move
-   void move() {
-       for (int i = body.size() - 1; i > 0; --i)
-           body[i] = body[i - 1];
-       if (dir == Direction::Left)
-           body[0].setX(body[0].getX() - 1);
-       else if (dir == Direction::Right)
-           body[0].setX(body[0].getX() + 1);
-       else if (dir == Direction::Up)
-           body[0].setY(body[0].getY() - 1);
-       else if (dir == Direction::Down)
-           body[0].setY(body[0].getY() + 1);
-   }
+    // snake move
+    void move() {
+        for (int i = body.size() - 1; i > 0; --i)
+            body[i] = body[i - 1];
+        if (dir == Direction::Left)
+            body[0].setX(body[0].getX() - 1);
+        else if (dir == Direction::Right)
+            body[0].setX(body[0].getX() + 1);
+        else if (dir == Direction::Up)
+            body[0].setY(body[0].getY() - 1);
+        else if (dir == Direction::Down)
+            body[0].setY(body[0].getY() + 1);
+    }
 
-   // get physicial direction
+    // get physicial direction
     Direction getPhysicalDirection() {
         const Cell& head = body[0];
         const Cell& neck = body[1];
@@ -315,18 +315,17 @@ public:
     }
 
     // snake render
-    void render(sf::RenderWindow* window_) {
-        if (body.empty()) { return; }
+    void render(sf::RenderWindow &window_) {
         auto head = body.begin();
         sf::RectangleShape bodyRect;
         bodyRect.setFillColor(D_GREEN);
         bodyRect.setPosition(head->getX() * cellSize,head->getY() * cellSize);
         bodyRect.setSize(sf::Vector2f(cellSize, cellSize));
-        window_->draw(bodyRect);
+        window_.draw(bodyRect);
         bodyRect.setFillColor(GREEN);
         for (auto itr = body.begin() + 1; itr != body.end(); ++itr) {
             bodyRect.setPosition(itr->getX() * cellSize,itr->getY() * cellSize);
-            window_->draw(bodyRect);
+            window_.draw(bodyRect);
         }
     }
 };
@@ -343,6 +342,22 @@ private:
     sf::Vector2u windowSize;
     int cellSize;
     Cell fruit;
+
+    // init bounds
+    void initBounds() {
+        for (int i = 0; i < 4; ++i) {
+            bounds[i].setFillColor(LGRAY);
+            if (((i + 1) & 1) == 0) {
+                bounds[i].setSize(sf::Vector2f(windowSize.x, cellSize));
+            } else bounds[i].setSize(sf::Vector2f(cellSize, windowSize.y));
+            if (i < 2) bounds[i].setPosition(0, 0);
+            else {
+                bounds[i].setOrigin(bounds[i].getSize());
+                bounds[i].setPosition(sf::Vector2f(windowSize));
+            }
+        }
+    }
+
 public:
     // world constructors
     explicit World(const sf::Vector2u& windowSize_) : snake(cellSize = 16), windowSize(windowSize_) {
@@ -353,18 +368,7 @@ public:
         slowTimeShape.setRadius(8);
         setRandomSlowTimePosition();
         cellSize = 16;
-        for (int i = 0; i < 4; ++i) {
-            bounds[i].setFillColor(LGRAY);
-            if (((i + 1) & 1) == 0) {
-                bounds[i].setSize(sf::Vector2f(windowSize.x, cellSize));
-            }
-            else bounds[i].setSize(sf::Vector2f(cellSize, windowSize.y));
-            if (i < 2) bounds[i].setPosition(0, 0);
-            else {
-                bounds[i].setOrigin(bounds[i].getSize());
-                bounds[i].setPosition(sf::Vector2f(windowSize));
-            }
-        }
+        initBounds();
     }
 
     // fruit random position
@@ -397,17 +401,22 @@ public:
     }
 
     // window render bounds
-    void render(sf::RenderWindow* window_) {
+    void render(sf::RenderWindow &window_) {
         for (int i = 0; i < 4; ++i) {
-            window_->draw(bounds[i]);
+            window_.draw(bounds[i]);
         }
-        window_->draw(fruitShape);
-        window_->draw(slowTimeShape);
+        window_.draw(fruitShape);
+        window_.draw(slowTimeShape);
     }
 
     // get snake
     Snake* getSnake() {
         return &snake;
+    }
+
+    // render snake
+    void renderSnake(sf::RenderWindow &window_) {
+        snake.render(window_);
     }
 
     // update snake
@@ -425,6 +434,30 @@ public:
             snake.lose();
     }
 
+    // snake tick
+    void tickSnake() {
+        snake.tick();
+    }
+
+    // snake has lost
+    bool snakeHasLost() {
+        return snake.hasLost();
+    }
+
+    // get the snake's speed
+    float getSnakeSpeed() {
+        return snake.getSpeed();
+    }
+
+    int getSnakeScore() {
+        return snake.getScore();
+    }
+
+    // reset snake
+    void resetSnake() {
+        snake.reset();
+    }
+
     // world destructor
     ~World() {}
 };
@@ -438,9 +471,9 @@ private:
     float timespent = 0, timestep = 10;
     sf::Text score;
     sf::Font font;
-public:
-    // game constructors
-    Game() : world(sf::Vector2u(800, 600)), window() {
+
+    // init score
+    void initScore() {
         font.loadFromFile("arial.ttf");
         score.setFont(font);
         score.setString("Score: ");
@@ -451,8 +484,14 @@ public:
 
     // game draw score
     void drawScore() {
-        score.setString("Score: " + std::to_string(world.getSnake()->getScore()));
-        window.getWindow()->draw(score);
+        score.setString("Score: " + std::to_string(world.getSnakeScore()));
+        window.drawScore(score);
+    }
+
+public:
+    // game constructors
+    Game() : world(sf::Vector2u(800, 600)), window() {
+        initScore();
     }
 
     // game operator<<
@@ -461,21 +500,12 @@ public:
         return os;
     }
 
-    // window getter
-    sf::RenderWindow* getWindow() {
-        return window.getWindow();
-    }
-
-    GameWindow* getWindow2() {
-        return &window;
-    }
-
     // render game
     void render() {
         window.beginDraw();
         drawScore();
         world.render(window.getWindow());
-        world.getSnake()->render(window.getWindow());
+        world.renderSnake(window.getWindow());
         window.endDraw();
     }
 
@@ -504,16 +534,21 @@ public:
     void update() {
         window.update(); // Update window events.
         if (timespent >= timestep) {
-            world.getSnake()->tick();
+            world.tickSnake();
             world.update();
-            if (world.getSnake()->hasLost()) {
-                world.getSnake()->reset();
+            if (world.snakeHasLost()) {
+                world.resetSnake();
                 world.setRandomFruitPosition();
                 world.setRandomSlowTimePosition();
             }
             timespent = 0.f;
         }
-        else timespent += world.getSnake()->getSpeed();
+        else timespent += world.getSnakeSpeed();
+    }
+
+    // game window not closed
+    bool windowNotClosed() {
+        return !window.isClosed();
     }
 
     // game destructor
@@ -526,7 +561,7 @@ int main() {
     Game game;
     std::cout << "GAME INFO:\n\n";
     std::cout << game;
-    while (!game.getWindow2()->isClosed()) {
+    while (game.windowNotClosed()) {
         game.handleInput();
         game.update();
         game.render();
