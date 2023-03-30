@@ -344,13 +344,13 @@ private:
         int maxY = (windowSize.y / cellSize) - 4;
         int orientation = rand() % 2;
         int x = rand() % maxX + 5, y = rand() % maxY + 5;
-        // orientare pe linie
+        // row orientation
         if (orientation == 0) {
             body.push_back(Cell(x, y + 2));
             body.push_back(Cell(x, y + 1));
             body.push_back(Cell(x, y));
         }
-        // orientare pe coloana
+        // column orientation
         else {
             body.push_back(Cell(x + 2, y));
             body.push_back(Cell(x + 1, y));
