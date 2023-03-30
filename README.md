@@ -2,7 +2,7 @@
 
 ## Controls:
 ### Arrows: 
-        <kbd>↑</kbd> - move one cell up 
+        <kbd>&larr;</kbd> - move one cell up 
         <kbd>↓</kbd> - move one cell down 
         <kbd>←</kbd> - move one cell left 
         <kbd>→</kbd> - move one cell right
