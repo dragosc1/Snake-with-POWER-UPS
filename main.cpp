@@ -120,6 +120,7 @@ public:
         window.display();
     }
 
+    // window draw score
     void drawScore(const sf::Text& score) {
         window.draw(score);
     }
@@ -139,6 +140,7 @@ public:
                 toggleFullscreen();
     }
 
+    // window is closed
     bool isClosed() {
         return isclosed;
     }
@@ -211,42 +213,22 @@ public:
     // extend the snake
     void extend() {
         const Cell& tailHead = body[body.size() - 1];
-        if (body.size() > 1) {
-            Cell& tailBone = body[body.size() - 2];
-            if (tailHead.getX() == tailBone.getX()) {
-                if (tailHead.getY() > tailBone.getY())
-                    body.push_back(Cell(tailHead.getX(), tailHead.getY() + 1));
-                else
-                    body.push_back(Cell(tailHead.getX(), tailHead.getY() - 1));
-            }
-            else if (tailHead.getY() == tailBone.getY()) {
-                if (tailHead.getX() > tailBone.getX()) {
-                    body.push_back(Cell(tailHead.getX() + 1, tailHead.getY()));
-                }
-                else {
-                    body.push_back(Cell(tailHead.getX() - 1, tailHead.getY()));
-                }
-            }
-        }
-        else {
-            if (dir == Direction::Up) {
+        Cell& tailBone = body[body.size() - 2];
+        if (tailHead.getX() == tailBone.getX()) {
+            if (tailHead.getY() > tailBone.getY())
                 body.push_back(Cell(tailHead.getX(), tailHead.getY() + 1));
-            }
-            else if (dir == Direction::Down) {
-                body.push_back(Cell(tailHead.getX(), tailHead.getY() - 1));
-            }
-            else if (dir == Direction::Left) {
+            else body.push_back(Cell(tailHead.getX(), tailHead.getY() - 1));
+        }
+        else if (tailHead.getY() == tailBone.getY()) {
+            if (tailHead.getX() > tailBone.getX())
                 body.push_back(Cell(tailHead.getX() + 1, tailHead.getY()));
-            }
-            else if (dir == Direction::Right) {
-                body.push_back(Cell(tailHead.getX() - 1, tailHead.getY()));
-            }
+            else body.push_back(Cell(tailHead.getX() - 1, tailHead.getY()));
         }
     }
 
     // snake move
     void move() {
-        for (int i = body.size() - 1; i > 0; --i)
+        for (unsigned int i = body.size() - 1; i > 0; --i)
             body[i] = body[i - 1];
         if (dir == Direction::Left)
             body[0].setX(body[0].getX() - 1);
@@ -278,7 +260,6 @@ public:
 
     // snake tick
     void tick() {
-        if (body.empty()) { return; }
         if (dir == Direction::NONE) { return; }
         speedTime--;
         if (speedTime == 0) {
