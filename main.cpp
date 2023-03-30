@@ -172,17 +172,16 @@ private:
     int cellSize;
 public:
     // snake constructors
-    explicit Snake(const int& cellSize_) : cellSize(cellSize_) {
-        reset();
+    explicit Snake(const int& cellSize_, const std::vector<Cell> &body_) : cellSize(cellSize_) {
+        reset(body_);
     }
     // reset snake
-    void reset() {
+    void reset(const std::vector<Cell> &body_) {
         body.clear();
-        body.push_back(Cell(5, 7));
-        body.push_back(Cell(5, 6));
-        body.push_back(Cell(5, 5));
-
+        for (unsigned int i = 0; i < body_.size(); i++)
+            body.push_back(body_[i]);
         setDirection(Direction::NONE); // snake direction is still
+        // default snake values
         score = 0;
         speed = 1;
         speedTime = 1e9;
@@ -339,9 +338,30 @@ private:
         }
     }
 
+    std::vector<Cell> randomSnakeLenght3() {
+        std::vector<Cell> body;
+        int maxX = (windowSize.x / cellSize) - 4;
+        int maxY = (windowSize.y / cellSize) - 4;
+        int orientation = rand() % 2;
+        int x = rand() % maxX + 5, y = rand() % maxY + 5;
+        // orientare pe linie
+        if (orientation == 0) {
+            body.push_back(Cell(x, y + 2));
+            body.push_back(Cell(x, y + 1));
+            body.push_back(Cell(x, y));
+        }
+        // orientare pe coloana
+        else {
+            body.push_back(Cell(x + 2, y));
+            body.push_back(Cell(x + 1, y));
+            body.push_back(Cell(x, y));
+        }
+        return body;
+    }
+
 public:
     // world constructors
-    explicit World(const sf::Vector2u& windowSize_) : snake(cellSize = 16), windowSize(windowSize_) {
+    explicit World(const sf::Vector2u& windowSize_) : snake(cellSize = 16, randomSnakeLenght3()), windowSize(windowSize_) {
         fruitShape.setFillColor(RED);
         fruitShape.setRadius(8);
         setRandomFruitPosition();
@@ -430,7 +450,8 @@ public:
 
     // reset snake
     void resetSnake() {
-        snake.reset();
+        std::vector<Cell> body_ = randomSnakeLenght3();
+        snake.reset(body_);
     }
 
     // update snake direction
@@ -536,7 +557,6 @@ public:
 
 int main() {
     srand(time(nullptr));
-
     Game game;
     std::cout << "GAME INFO:\n\n";
     std::cout << game;
