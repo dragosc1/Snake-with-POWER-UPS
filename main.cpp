@@ -213,7 +213,7 @@ public:
     // extend the snake
     void extend() {
         const Cell& tailHead = body[body.size() - 1];
-        Cell& tailBone = body[body.size() - 2];
+        const Cell& tailBone = body[body.size() - 2];
         if (tailHead.getX() == tailBone.getX()) {
             if (tailHead.getY() > tailBone.getY())
                 body.push_back(Cell(tailHead.getX(), tailHead.getY() + 1));
