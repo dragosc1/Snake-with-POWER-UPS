@@ -402,16 +402,10 @@ public:
 
     // window render bounds
     void render(sf::RenderWindow &window_) {
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 4; ++i)
             window_.draw(bounds[i]);
-        }
         window_.draw(fruitShape);
         window_.draw(slowTimeShape);
-    }
-
-    // get snake
-    Snake* getSnake() {
-        return &snake;
     }
 
     // render snake
@@ -458,8 +452,20 @@ public:
         snake.reset();
     }
 
+    // update snake direction
+    void updateSnakeDirection(const Direction &dir) {
+        if (dir == Direction::Up && snake.getPhysicalDirection() != Direction::Down)
+            snake.setDirection(dir);
+        else if (dir == Direction::Down && snake.getPhysicalDirection() != Direction::Up)
+            snake.setDirection(dir);
+        else if (dir == Direction::Left && snake.getPhysicalDirection() != Direction::Right)
+            snake.setDirection(dir);
+        else if (dir == Direction::Right && snake.getPhysicalDirection() != Direction::Left)
+            snake.setDirection(dir);
+    }
+
     // world destructor
-    ~World() {}
+    ~World() = default;
 };
 
 // The game
@@ -512,22 +518,14 @@ public:
     // handle the input
     void handleInput() {
         window.update();
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)
-            && world.getSnake()->getPhysicalDirection() != Direction::Down) {
-            world.getSnake()->setDirection(Direction::Up);
-        }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)
-                 && world.getSnake()->getPhysicalDirection() != Direction::Up) {
-            world.getSnake()->setDirection(Direction::Down);
-        }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)
-                 && world.getSnake()->getPhysicalDirection() != Direction::Right) {
-            world.getSnake()->setDirection(Direction::Left);
-        }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)
-                 && world.getSnake()->getPhysicalDirection() != Direction::Left) {
-            world.getSnake()->setDirection(Direction::Right);
-        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+            world.updateSnakeDirection(Direction::Up);
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+            world.updateSnakeDirection(Direction::Down);
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+            world.updateSnakeDirection(Direction::Left);
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+            world.updateSnakeDirection(Direction::Right);
     }
 
     // game update
@@ -552,11 +550,11 @@ public:
     }
 
     // game destructor
-    ~Game() {}
+    ~Game() = default;
 };
 
 int main() {
-    srand(time(NULL));
+    srand(time(nullptr));
 
     Game game;
     std::cout << "GAME INFO:\n\n";
