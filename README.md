@@ -1,7 +1,7 @@
 # Snake with POWER-UPS
 
 ## Controls:
-### Arrows: 
+Arrows: 
         <kbd>Ctrl</kbd> - move one cell up 
         <kbd>↓</kbd> - move one cell down 
         <kbd>←</kbd> - move one cell left 
