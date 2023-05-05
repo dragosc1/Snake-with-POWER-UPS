@@ -12,7 +12,7 @@ class Snake {
 private:
     // snake data
     std::vector<Cell> body;
-    float speed;
+    double speed;
     int score, speedTime;
     bool lost;
     Direction dir;
