@@ -15,6 +15,7 @@ const sf::Color RED = sf::Color::Red;
 const sf::Color WHITE = sf::Color::White;
 const sf::Color LGRAY = sf::Color(100, 100, 100);
 const sf::Color BLUE = sf::Color::Blue;
+const sf::Color PURPLE = sf::Color(100, 0, 100);
 
 // directions for snake
 enum class Direction {

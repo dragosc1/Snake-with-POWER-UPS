@@ -39,6 +39,9 @@ int Snake::getScore() { return score; }
 // increase score
 void Snake::increaseScore() { score++; }
 
+// increase snake speed
+void Snake::increaseSpeed() { speed *= 1.1; }
+
 // snake has lost
 void Snake::lose() { lost = true; }
 
@@ -69,6 +72,14 @@ void Snake::move() {
         body[0].setY(body[0].getY() - 1);
     else if (dir == Direction::Down)
         body[0].setY(body[0].getY() + 1);
+}
+
+// snake shorter by 1/3
+void Snake::shorter() {
+    if (body.size() == 1)
+        return;
+    for (unsigned int i = 0; i < body.size() / 3; i++)
+        body.pop_back();
 }
 
 // get physicial direction

@@ -41,6 +41,9 @@ public:
     // increase score
     void increaseScore();
 
+    // increase snake speed
+    void increaseSpeed();
+
     // snake has lost
     void lose();
 
@@ -49,6 +52,9 @@ public:
 
     // snake move
     void move();
+
+    // snake shorter by 1/3
+    void shorter();
 
     // get physicial direction
     Direction getPhysicalDirection();

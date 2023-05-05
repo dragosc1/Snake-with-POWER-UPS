@@ -3,6 +3,7 @@
 //
 #include "../headers/World.h"
 #include "../headers/SlowTimePowerUp.h"
+#include "../headers/ShorterSnakePowerUp.h"
 
 // init bounds
 void World::initBounds() {
@@ -68,10 +69,13 @@ void World::setRandomPowerUp() {
     int maxY = (windowSize.y / cellSize) - 2;
     int x = rand() % maxX + 1;
     int y = rand() % maxY + 1;
-    int type = rand() % 1;
-    PowerUp* powerUp;
+    int type = rand() % 2;
     if (type == 0) {
-        powerUp = new SlowTimePowerUp({{x, y}, cellSize});
+        PowerUp *powerUp = new SlowTimePowerUp({{x, y}, cellSize});
+        powerUps.push_back(powerUp);
+    }
+    else {
+        PowerUp *powerUp = new ShorterSnakePowerUp({{x, y}, cellSize});
         powerUps.push_back(powerUp);
     }
 }
@@ -116,6 +120,7 @@ void World::update() {
     if (snake.getPosition() == fruit) {
         snake.extend();
         snake.increaseScore();
+        snake.increaseSpeed();
         setRandomFruitPosition();
     }
     if (snake.outOfBounds(windowSize))
@@ -144,6 +149,9 @@ int World::getSnakeScore() {
 // reset snake
 void World::resetSnake() {
     std::vector <Cell> body_ = randomSnakeLength3();
+    for (int i = 0; i < powerUps.size(); i++)
+        delete powerUps[i];
+    powerUps.clear();
     snake.reset(body_);
 }
 
