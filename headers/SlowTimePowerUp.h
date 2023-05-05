@@ -10,7 +10,7 @@
 
 class SlowTimePowerUp : public PowerUp {
 public:
-    SlowTimePowerUp(std::pair<std::pair<int, int>, int> );
+    explicit SlowTimePowerUp(std::pair<std::pair<int, int>, int> );
     ~SlowTimePowerUp();
     void render(sf::RenderWindow &) override;
     void applyPowerUp(Snake& ) override;

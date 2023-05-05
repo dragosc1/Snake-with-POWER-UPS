@@ -10,7 +10,7 @@ class ShorterSnakePowerUp : public PowerUp {
 private:
 
 public:
-    ShorterSnakePowerUp(std::pair<std::pair<int, int>, int> );
+    explicit ShorterSnakePowerUp(std::pair<std::pair<int, int>, int> );
     ~ShorterSnakePowerUp();
     void render(sf::RenderWindow &) override;
     void applyPowerUp(Snake& ) override;

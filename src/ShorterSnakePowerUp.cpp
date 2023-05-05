@@ -9,7 +9,7 @@ ShorterSnakePowerUp::ShorterSnakePowerUp(std::pair<std::pair<int, int>, int> x) 
     shape.setRadius(8);
 }
 
-ShorterSnakePowerUp::~ShorterSnakePowerUp() noexcept {
+ShorterSnakePowerUp::~ShorterSnakePowerUp() {
 
 }
 void ShorterSnakePowerUp::render(sf::RenderWindow &window) {

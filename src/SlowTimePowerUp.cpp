@@ -9,7 +9,7 @@ SlowTimePowerUp::SlowTimePowerUp(std::pair<std::pair<int, int>, int> x) : PowerU
     shape.setRadius(8);
 }
 
-SlowTimePowerUp::~SlowTimePowerUp() noexcept {
+SlowTimePowerUp::~SlowTimePowerUp() {
 
 }
 

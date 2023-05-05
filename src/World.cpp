@@ -149,7 +149,7 @@ int World::getSnakeScore() {
 // reset snake
 void World::resetSnake() {
     std::vector <Cell> body_ = randomSnakeLength3();
-    for (int i = 0; i < powerUps.size(); i++)
+    for (unsigned int i = 0; i < powerUps.size(); i++)
         delete powerUps[i];
     powerUps.clear();
     snake.reset(body_);
