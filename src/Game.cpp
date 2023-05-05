@@ -1,9 +1,8 @@
 //
 // Created by dragosc1 on 21.04.2023.
 //
-// The game
-// game data
 #include "../headers/Game.h"
+
 // init score
 void Game::initScore() {
     font.loadFromFile("arial.ttf");
@@ -63,7 +62,7 @@ void Game::update() {
         if (world.snakeHasLost()) {
             world.resetSnake();
             world.setRandomFruitPosition();
-            world.setRandomSlowTimePosition();
+            world.setRandomPowerUp();
         }
         timespent = 0.f;
     } else timespent += world.getSnakeSpeed();

@@ -1,7 +1,7 @@
 //
 // Created by dragosc1 on 21.04.2023.
 //
-// The snake
+
 // snake constructors
 #include "../headers/Snake.h"
 Snake::Snake(const int &cellSize_, const std::vector <Cell> &body_) : cellSize(cellSize_) {

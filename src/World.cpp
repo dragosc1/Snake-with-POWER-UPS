@@ -2,6 +2,8 @@
 // Created by dragosc1 on 21.04.2023.
 //
 #include "../headers/World.h"
+#include "../headers/SlowTimePowerUp.h"
+
 // init bounds
 void World::initBounds() {
     for (int i = 0; i < 4; ++i) {
@@ -17,6 +19,7 @@ void World::initBounds() {
     }
 }
 
+// generate random snake of length 3
 std::vector <Cell> World::randomSnakeLength3() {
     std::vector <Cell> body;
     int maxX = (windowSize.x / cellSize) - 4;
@@ -29,7 +32,7 @@ std::vector <Cell> World::randomSnakeLength3() {
         body.push_back(Cell(x, y + 1));
         body.push_back(Cell(x, y));
     }
-        // column orientation
+    // column orientation
     else {
         body.push_back(Cell(x + 2, y));
         body.push_back(Cell(x + 1, y));
@@ -40,12 +43,11 @@ std::vector <Cell> World::randomSnakeLength3() {
 
 // world constructors
 World::World(const sf::Vector2u &windowSize_) : snake(cellSize = 16, randomSnakeLength3()), windowSize(windowSize_) {
+    powerUps.clear();
     fruitShape.setFillColor(RED);
     fruitShape.setRadius(8);
     setRandomFruitPosition();
-    slowTimeShape.setFillColor(BLUE);
-    slowTimeShape.setRadius(8);
-    setRandomSlowTimePosition();
+    setRandomPowerUp();
     cellSize = 16;
     initBounds();
 }
@@ -61,13 +63,17 @@ void World::setRandomFruitPosition() {
 }
 
 // fruit random position
-void World::setRandomSlowTimePosition() {
+void World::setRandomPowerUp() {
     int maxX = (windowSize.x / cellSize) - 2;
     int maxY = (windowSize.y / cellSize) - 2;
     int x = rand() % maxX + 1;
     int y = rand() % maxY + 1;
-    slowTime = Cell(x, y);
-    slowTimeShape.setPosition(sf::Vector2f(x * cellSize, y * cellSize));
+    int type = rand() % 1;
+    PowerUp* powerUp;
+    if (type == 0) {
+        powerUp = new SlowTimePowerUp({{x, y}, cellSize});
+    }
+    powerUps.push_back(powerUp);
 }
 
 // world operator<<
@@ -75,8 +81,9 @@ std::ostream &operator<<(std::ostream &os, const World &world) {
     os << world.snake << "Fruit:\t" << "X=" << world.fruitShape.getPosition().x << "; Y="
        << world.fruitShape.getPosition().y << '\n';
     os << "PowerUps available:\n";
-    os << "Slow time:\t" << "X=" << world.slowTimeShape.getPosition().x << "; Y=" << world.slowTimeShape.getPosition().y
-       << "\n\n";
+    for (PowerUp *powerUp : world.powerUps)
+        os << powerUp->displayType() << ": " << "X=" << powerUp->getPosition().getX() * world.cellSize << "; " << "Y=" << powerUp->getPosition().getY() * world.cellSize;
+    os << "\n\n";
     os << "Cell size: " << world.cellSize << '\n';
     return os;
 }
@@ -87,6 +94,8 @@ void World::render(sf::RenderWindow &window_) {
         window_.draw(bounds[i]);
     window_.draw(fruitShape);
     window_.draw(slowTimeShape);
+    for (PowerUp* powerUp : powerUps)
+        powerUp->render(window_);
 }
 
 // render snake
@@ -96,10 +105,14 @@ void World::renderSnake(sf::RenderWindow &window_) {
 
 // update snake
 void World::update() {
-    if (snake.getPosition() == slowTime) {
-        snake.slowTime();
-        setRandomSlowTimePosition();
-    }
+    for (unsigned int i = 0; i < powerUps.size(); i++)
+        if (snake.getPosition() == powerUps[i]->getPosition()) {
+            powerUps[i]->applyPowerUp(snake);
+            delete powerUps[i];
+            powerUps.erase(powerUps.begin() + i);
+            setRandomPowerUp();
+            break;
+        }
     if (snake.getPosition() == fruit) {
         snake.extend();
         snake.increaseScore();

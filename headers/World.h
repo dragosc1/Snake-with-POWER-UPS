@@ -5,6 +5,8 @@
 #ifndef OOP_WORLD_H
 #define OOP_WORLD_H
 #include "Snake.h"
+#include "PowerUp.h"
+
 // The World
 class World {
 private:
@@ -17,10 +19,12 @@ private:
     sf::Vector2u windowSize;
     int cellSize;
     Cell fruit;
+    std::vector<PowerUp*> powerUps;
 
     // init bounds
     void initBounds();
 
+    // generate random snake of length 3
     std::vector<Cell> randomSnakeLength3();
 
 public:
@@ -30,8 +34,8 @@ public:
     // fruit random position
     void setRandomFruitPosition();
 
-    // fruit random position
-    void setRandomSlowTimePosition();
+    // powerup random position
+    void setRandomPowerUp();
 
     // world operator<<
     friend std::ostream& operator<<(std::ostream& , const World& );
