@@ -72,8 +72,8 @@ void World::setRandomPowerUp() {
     PowerUp* powerUp;
     if (type == 0) {
         powerUp = new SlowTimePowerUp({{x, y}, cellSize});
+        powerUps.push_back(powerUp);
     }
-    powerUps.push_back(powerUp);
 }
 
 // world operator<<
