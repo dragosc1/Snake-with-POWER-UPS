@@ -12,8 +12,6 @@ class World {
 private:
     // world data
     Snake snake;
-    sf::CircleShape slowTimeShape;
-    Cell slowTime;
     sf::RectangleShape bounds[4];
     sf::CircleShape fruitShape;
     sf::Vector2u windowSize;
@@ -30,7 +28,13 @@ private:
 public:
     // world constructors
     explicit World(const sf::Vector2u&);
-    
+
+    // world operator=
+    World& operator= (World );
+
+    // world swap
+    friend void swap(World &, World &);
+
     // fruit random position
     void setRandomFruitPosition();
 

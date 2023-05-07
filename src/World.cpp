@@ -53,6 +53,23 @@ World::World(const sf::Vector2u &windowSize_) : snake(cellSize = 16, randomSnake
     initBounds();
 }
 
+// world operator=
+World& World::operator=(World other) {
+    swap(*this, other);
+    return *this;
+}
+
+void swap(World &world1, World &world2) {
+    using std::swap;
+    swap(world1.snake, world2.snake);
+    swap(world1.fruit, world2.fruit);
+    swap(world1.fruitShape, world2.fruitShape);
+    swap(world1.windowSize, world2.windowSize);
+    swap(world1.cellSize, world2.cellSize);
+    swap(world1.bounds, world2.bounds);
+    swap(world1.powerUps, world2.powerUps);
+}
+
 // fruit random position
 void World::setRandomFruitPosition() {
     int maxX = (windowSize.x / cellSize) - 2;
@@ -99,7 +116,6 @@ void World::render(sf::RenderWindow &window_) {
     for (const auto & bound : bounds)
         window_.draw(bound);
     window_.draw(fruitShape);
-    window_.draw(slowTimeShape);
     for (PowerUp* powerUp : powerUps)
         powerUp->render(window_);
 }
