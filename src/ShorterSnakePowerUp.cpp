@@ -4,6 +4,15 @@
 
 #include "../headers/ShorterSnakePowerUp.h"
 
+ShorterSnakePowerUp::ShorterSnakePowerUp(const ShorterSnakePowerUp &other) : PowerUp(other) {}
+
+ShorterSnakePowerUp& ShorterSnakePowerUp::operator=(const ShorterSnakePowerUp &other) {
+    PowerUp& powerUp = *this;
+    powerUp = other;
+
+    return *this;
+}
+
 ShorterSnakePowerUp::ShorterSnakePowerUp(std::pair<std::pair<int, int>, int> x) : PowerUp(x) {
     shape.setFillColor(PURPLE);
     shape.setRadius(8);
@@ -22,4 +31,15 @@ void ShorterSnakePowerUp::applyPowerUp(Snake &snake) {
 
 std::string ShorterSnakePowerUp::displayType() {
     return "Shorter Snake";
+}
+
+// clone
+ShorterSnakePowerUp* ShorterSnakePowerUp::clone() const {
+    return new ShorterSnakePowerUp(*this);
+}
+
+// shorterSnakePowerUp operator<<
+std::ostream& operator<<(std::ostream& os, ShorterSnakePowerUp &SSP) {
+    os << SSP.displayType() << ": \t" << "X=" << SSP.getPosition().getX() << "; " << "Y=" << SSP.getPosition().getY() << '\n';
+    return os;
 }

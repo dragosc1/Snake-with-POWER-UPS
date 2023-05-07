@@ -4,6 +4,15 @@
 
 #include "../headers/SlowTimePowerUp.h"
 
+SlowTimePowerUp::SlowTimePowerUp(const SlowTimePowerUp &other) : PowerUp(other) {}
+
+SlowTimePowerUp& SlowTimePowerUp::operator=(const SlowTimePowerUp &other) {
+    PowerUp& powerUp = *this;
+    powerUp = other;
+
+    return *this;
+}
+
 SlowTimePowerUp::SlowTimePowerUp(std::pair<std::pair<int, int>, int> x) : PowerUp(x) {
     shape.setFillColor(BLUE);
     shape.setRadius(8);
@@ -23,4 +32,15 @@ void SlowTimePowerUp::applyPowerUp(Snake &snake) {
 
 std::string SlowTimePowerUp::displayType() {
     return "Slow Time";
+}
+
+// clone
+SlowTimePowerUp* SlowTimePowerUp::clone() const {
+    return new SlowTimePowerUp(*this);
+}
+
+// slowTimePowerUp operator<<
+std::ostream& operator<<(std::ostream& os, SlowTimePowerUp &STP) {
+    os << STP.displayType() << ": \t" << "X=" << STP.getPosition().getX() << "; " << "Y=" << STP.getPosition().getY() << '\n';
+    return os;
 }

@@ -4,6 +4,9 @@
 
 // snake constructors
 #include "../headers/Snake.h"
+
+int Snake::score = 0;
+
 Snake::Snake(const int &cellSize_, const std::vector <Cell> &body_) : cellSize(cellSize_) {
     reset(body_);
 }
@@ -76,8 +79,7 @@ void Snake::move() {
 
 // snake shorter by 1/3
 void Snake::shorter() {
-    if (body.size() == 1)
-        return;
+    // if the length is <= 2 it doesn't do anything
     for (unsigned int i = 0; i < body.size() / 3; i++)
         body.pop_back();
 }

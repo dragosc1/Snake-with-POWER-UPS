@@ -30,7 +30,7 @@ private:
 public:
     // world constructors
     explicit World(const sf::Vector2u&);
-
+    
     // fruit random position
     void setRandomFruitPosition();
 

@@ -14,12 +14,15 @@ private:
 protected:
     sf::CircleShape shape;
 public:
+    PowerUp();
+    PowerUp(const PowerUp& );
     PowerUp(std::pair<std::pair<int, int>, int> );
-    static int powerups;
     virtual ~PowerUp();
     virtual void render(sf::RenderWindow& ) = 0;
     virtual void applyPowerUp(Snake& ) = 0;
     virtual std::string displayType() = 0;
+    friend std::ostream& operator<<(std::ostream&, PowerUp*);
+    virtual PowerUp* clone() const = 0;
     Cell getPosition();
 };
 

@@ -10,11 +10,14 @@
 
 class SlowTimePowerUp : public PowerUp {
 public:
+    SlowTimePowerUp(const SlowTimePowerUp& );
+    SlowTimePowerUp& operator=(const SlowTimePowerUp& );
     explicit SlowTimePowerUp(std::pair<std::pair<int, int>, int> );
     ~SlowTimePowerUp();
     void render(sf::RenderWindow &) override;
     void applyPowerUp(Snake& ) override;
     std::string displayType() override;
+    SlowTimePowerUp* clone() const override;
 };
 
 

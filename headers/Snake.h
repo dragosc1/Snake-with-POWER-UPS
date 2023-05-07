@@ -13,7 +13,8 @@ private:
     // snake data
     std::vector<Cell> body;
     double speed;
-    int score, speedTime;
+    static int score;
+    int speedTime;
     bool lost;
     Direction dir;
     int cellSize;
@@ -23,7 +24,7 @@ public:
     // reset snake
     void reset(const std::vector<Cell> &);
 
-    // snake direciton setter
+    // snake direction setter
     void setDirection(const Direction &);
 
     // snake lost
@@ -36,10 +37,10 @@ public:
     Cell getPosition();
 
     // get snake score
-    int getScore();
+    static int getScore();
 
     // increase score
-    void increaseScore();
+    static void increaseScore();
 
     // increase snake speed
     void increaseSpeed();

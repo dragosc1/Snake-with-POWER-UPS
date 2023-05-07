@@ -10,11 +10,14 @@ class ShorterSnakePowerUp : public PowerUp {
 private:
 
 public:
+    ShorterSnakePowerUp(const ShorterSnakePowerUp& );
+    ShorterSnakePowerUp& operator=(const ShorterSnakePowerUp& );
     explicit ShorterSnakePowerUp(std::pair<std::pair<int, int>, int> );
     ~ShorterSnakePowerUp();
     void render(sf::RenderWindow &) override;
     void applyPowerUp(Snake& ) override;
     std::string displayType() override;
+    ShorterSnakePowerUp* clone() const override;
 };
 
 

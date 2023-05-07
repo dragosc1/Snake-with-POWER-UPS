@@ -86,7 +86,7 @@ std::ostream &operator<<(std::ostream &os, const World &world) {
        << world.fruitShape.getPosition().y << '\n';
     os << "PowerUps available:\n";
     for (PowerUp *powerUp : world.powerUps)
-        os << powerUp->displayType() << ": " << "X=" << powerUp->getPosition().getX() * world.cellSize << "; " << "Y=" << powerUp->getPosition().getY() * world.cellSize;
+        os << powerUp;
     os << "\n\n";
     os << "Cell size: " << world.cellSize << '\n';
     return os;
