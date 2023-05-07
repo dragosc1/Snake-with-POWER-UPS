@@ -5,6 +5,8 @@
 
 // init score
 void Game::initScore() {
+    if (!font.loadFromFile("arial.ttf"))
+        throw font_error();
     font.loadFromFile("arial.ttf");
     score.setFont(font);
     score.setString("Score: ");

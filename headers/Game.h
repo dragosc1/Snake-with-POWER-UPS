@@ -6,6 +6,7 @@
 #define OOP_GAME_H
 #include "World.h"
 #include "GameWindow.h"
+#include "Exceptions.h"
 
 // The game
 class Game {
