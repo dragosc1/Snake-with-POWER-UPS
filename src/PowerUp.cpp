@@ -4,14 +4,7 @@
 
 #include "../headers/PowerUp.h"
 
-PowerUp::PowerUp() {
-    position = Cell(0, 0);
-}
-
-PowerUp::PowerUp(const PowerUp &other) {
-    position = other.position;
-    shape = other.shape;
-}
+PowerUp::PowerUp() : position(Cell(0, 0)) {}
 
 PowerUp::PowerUp(std::pair<std::pair<int, int>, int> x) {
     std::pair<int, int> pos = x.first;

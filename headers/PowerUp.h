@@ -15,7 +15,6 @@ protected:
     sf::CircleShape shape;
 public:
     PowerUp();
-    PowerUp(const PowerUp& );
     PowerUp(std::pair<std::pair<int, int>, int> );
     virtual ~PowerUp();
     virtual void render(sf::RenderWindow& ) = 0;

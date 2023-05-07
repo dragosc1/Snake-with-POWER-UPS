@@ -72,11 +72,13 @@ void World::setRandomPowerUp() {
     int type = rand() % 2;
     if (type == 0) {
         PowerUp *powerUp = new SlowTimePowerUp({{x, y}, cellSize});
-        powerUps.push_back(powerUp);
+        powerUps.push_back(powerUp->clone());
+        delete powerUp;
     }
     else {
         PowerUp *powerUp = new ShorterSnakePowerUp({{x, y}, cellSize});
-        powerUps.push_back(powerUp);
+        powerUps.push_back(powerUp->clone());
+        delete powerUp;
     }
 }
 
@@ -94,8 +96,8 @@ std::ostream &operator<<(std::ostream &os, const World &world) {
 
 // window render bounds
 void World::render(sf::RenderWindow &window_) {
-    for (int i = 0; i < 4; ++i)
-        window_.draw(bounds[i]);
+    for (const auto & bound : bounds)
+        window_.draw(bound);
     window_.draw(fruitShape);
     window_.draw(slowTimeShape);
     for (PowerUp* powerUp : powerUps)
@@ -119,7 +121,7 @@ void World::update() {
         }
     if (snake.getPosition() == fruit) {
         snake.extend();
-        snake.increaseScore();
+        Snake::increaseScore();
         snake.increaseSpeed();
         setRandomFruitPosition();
     }
@@ -168,4 +170,7 @@ void World::updateSnakeDirection(const Direction &dir) {
 }
 
 // world destructor
-World::~World() = default;
+World::~World() {
+    for (int i = powerUps.size() - 1; i >= 0; i--)
+        delete powerUps[i];
+}
