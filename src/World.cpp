@@ -89,13 +89,11 @@ void World::setRandomPowerUp() {
     int type = rand() % 2;
     if (type == 0) {
         PowerUp *powerUp = new SlowTimePowerUp({{x, y}, cellSize});
-        powerUps.push_back(powerUp->clone());
-        delete powerUp;
+        powerUps.push_back(powerUp);
     }
     else {
         PowerUp *powerUp = new ShorterSnakePowerUp({{x, y}, cellSize});
-        powerUps.push_back(powerUp->clone());
-        delete powerUp;
+        powerUps.push_back(powerUp);
     }
 }
 
