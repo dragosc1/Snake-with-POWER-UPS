@@ -59,13 +59,9 @@ void Game::handleInput() {
 void Game::update() {
     window.update(); // Update window events.
     if (timespent >= timestep) {
-        world.tickSnake();
         world.update();
-        if (world.snakeHasLost()) {
-            world.resetSnake();
-            world.setRandomFruitPosition();
-            world.setRandomPowerUp();
-        }
+        if (world.snakeHasLost())
+            world.reset();
         timespent = 0.f;
     } else timespent += world.getSnakeSpeed();
 }

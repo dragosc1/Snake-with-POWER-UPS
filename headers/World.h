@@ -25,15 +25,14 @@ private:
     // generate random snake of length 3
     std::vector<Cell> randomSnakeLength3();
 
-public:
-    // world constructors
-    explicit World(const sf::Vector2u&);
-
-    // world operator=
-    World& operator= (World );
+    // cleanUp powerUps
+    void cleanUp();
 
     // world swap
     friend void swap(World &, World &);
+
+    // snake tick
+    void tickSnake();
 
     // fruit random position
     void setRandomFruitPosition();
@@ -41,30 +40,41 @@ public:
     // powerup random position
     void setRandomPowerUp();
 
+    // reset snake
+    void resetSnake();
+
+public:
+
+    // world constructors
+    explicit World(const sf::Vector2u&);
+    World(const World& );
+
+    // world operator=
+    World& operator= (World );
+
     // world operator<<
     friend std::ostream& operator<<(std::ostream& , const World& );
 
     // window render bounds
     void render(sf::RenderWindow &);
+
     // render snake
     void renderSnake(sf::RenderWindow &);
 
     // update snake
     void update();
 
-    // snake tick
-    void tickSnake();
+    // world reset
+    void reset();
+
+    // get snake score
+    int getSnakeScore();
 
     // snake has lost
     bool snakeHasLost();
 
     // get the snake's speed
     float getSnakeSpeed();
-
-    int getSnakeScore();
-
-    // reset snake
-    void resetSnake();
 
     // update snake direction
     void updateSnakeDirection(const Direction &);

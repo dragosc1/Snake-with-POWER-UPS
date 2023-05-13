@@ -15,7 +15,7 @@ void World::initBounds() {
         if (i < 2) bounds[i].setPosition(0, 0);
         else {
             bounds[i].setOrigin(bounds[i].getSize());
-            bounds[i].setPosition(sf::Vector2f(windowSize));
+            bounds  [i].setPosition(sf::Vector2f(windowSize));
         }
     }
 }
@@ -42,6 +42,13 @@ std::vector <Cell> World::randomSnakeLength3() {
     return body;
 }
 
+// cleanUp powerUps
+void World::cleanUp() {
+    for (unsigned int i = 0; i < powerUps.size(); i++)
+        delete powerUps[i];
+    powerUps.clear();
+}
+
 // world constructors
 World::World(const sf::Vector2u &windowSize_) : snake(cellSize = 16, randomSnakeLength3()), windowSize(windowSize_) {
     powerUps.clear();
@@ -51,6 +58,14 @@ World::World(const sf::Vector2u &windowSize_) : snake(cellSize = 16, randomSnake
     setRandomPowerUp();
     cellSize = 16;
     initBounds();
+}
+
+World::World(const World& other) : snake(other.snake), fruitShape(other.fruitShape), windowSize(other.windowSize), cellSize(other.cellSize), fruit(other.fruit) {
+    for (int i = 0; i < 4; i++)
+        bounds[i] = other.bounds[i];
+    powerUps.clear();
+    for (unsigned int i = 0; i < other.powerUps.size(); i++)
+        powerUps.push_back(other.powerUps[i]->clone());
 }
 
 // world operator=
@@ -86,12 +101,12 @@ void World::setRandomPowerUp() {
     int maxY = (windowSize.y / cellSize) - 2;
     int x = rand() % maxX + 1;
     int y = rand() % maxY + 1;
-    int type = rand() % 2;
-    if (type == 0) {
+    int type = rand() % PowerUpCount;
+    if (type == SlowTimePowerUpType) {
         PowerUp *powerUp = new SlowTimePowerUp({{x, y}, cellSize});
         powerUps.push_back(powerUp);
     }
-    else {
+    else if (type == ShorterSnakePowerUpType) {
         PowerUp *powerUp = new ShorterSnakePowerUp({{x, y}, cellSize});
         powerUps.push_back(powerUp);
     }
@@ -141,6 +156,13 @@ void World::update() {
     }
     if (snake.outOfBounds(windowSize))
         snake.lose();
+    tickSnake();
+}
+
+void World::reset() {
+    resetSnake();
+    setRandomFruitPosition();
+    setRandomPowerUp();
 }
 
 // snake tick
@@ -165,9 +187,7 @@ int World::getSnakeScore() {
 // reset snake
 void World::resetSnake() {
     std::vector <Cell> body_ = randomSnakeLength3();
-    for (unsigned int i = 0; i < powerUps.size(); i++)
-        delete powerUps[i];
-    powerUps.clear();
+    cleanUp();
     snake.reset(body_);
 }
 
@@ -185,6 +205,5 @@ void World::updateSnakeDirection(const Direction &dir) {
 
 // world destructor
 World::~World() {
-    for (int i = powerUps.size() - 1; i >= 0; i--)
-        delete powerUps[i];
+    cleanUp();
 }

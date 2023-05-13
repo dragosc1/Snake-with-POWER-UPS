@@ -26,4 +26,10 @@ enum class Direction {
     Right
 };
 
+enum PowerUps {
+    SlowTimePowerUpType,
+    ShorterSnakePowerUpType,
+    PowerUpCount
+};
+
 #endif //OOP_EXTERN_H
