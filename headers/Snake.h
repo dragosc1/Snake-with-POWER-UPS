@@ -14,8 +14,8 @@ private:
     std::vector<Cell> body;
     double speed;
     static int score;
-    int speedTime;
-    bool lost;
+    int speedTime, invincibilityTime;
+    bool lost, invincible;
     Direction dir;
     int cellSize;
 public:
@@ -56,6 +56,9 @@ public:
 
     // snake shorter by 1/3
     void shorter();
+
+    // snake activate invincibility
+    void activateInvincibility();
 
     // get physicial direction
     Direction getPhysicalDirection();

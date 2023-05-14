@@ -21,6 +21,7 @@ void Snake::reset(const std::vector <Cell> &body_) {
     score = 0;
     speed = 1;
     speedTime = 1e9;
+    invincibilityTime = 0;
     lost = false;
 }
 
@@ -84,6 +85,12 @@ void Snake::shorter() {
         body.pop_back();
 }
 
+// snake activate invincibility
+void Snake::activateInvincibility() {
+    invincible = 1;
+    invincibilityTime = 30;
+}
+
 // get physicial direction
 Direction Snake::getPhysicalDirection() {
     const Cell &head = body[0];
@@ -111,7 +118,13 @@ void Snake::tick() {
         speedTime = 1e9;
     }
     move();
-    checkCollision();
+    if (!invincible)
+        checkCollision();
+    else {
+        invincibilityTime--;
+        if (invincibilityTime == 0)
+            invincible = 0;
+    }
 }
 
 // snake out of bounds
