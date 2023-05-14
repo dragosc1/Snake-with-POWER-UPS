@@ -13,6 +13,15 @@ int main() {
             game.render();
         }
     }
+    catch(std::overflow_error &err) {
+        std::cout << err.what();
+    }
+    catch(std::logic_error &err) {
+        std::cout << err.what();
+    }
+    catch (std::bad_alloc& err) {
+        std::cout << err.what();
+    }
     catch (font_error &err) {
         std::cout << err.what();
     }
