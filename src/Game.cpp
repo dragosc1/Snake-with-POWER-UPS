@@ -10,7 +10,7 @@ void Game::initScore() {
     font.loadFromFile("arial.ttf");
     score.setFont(font);
     score.setString("Score: ");
-    score.setPosition(sf::Vector2f(700, 16));
+    score.setPosition(sf::Vector2f(30, 20));
     score.setCharacterSize(20);
     score.setFillColor(WHITE);
 }
