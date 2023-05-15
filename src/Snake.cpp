@@ -31,6 +31,9 @@ void Snake::setDirection(const Direction &dir_) { dir = dir_; }
 // snake lost
 bool Snake::hasLost() { return lost; }
 
+// snake body length
+unsigned int Snake::bodyLength() { return body.size(); }
+
 // snake get speed
 float Snake::getSpeed() { return speed; }
 

@@ -30,6 +30,9 @@ public:
     // snake lost
     bool hasLost();
 
+    // snake body length
+    unsigned int bodyLength();
+
     // snake get speed
     float getSpeed();
 

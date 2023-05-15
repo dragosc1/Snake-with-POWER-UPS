@@ -5,6 +5,7 @@
 #include "../headers/SlowTimePowerUp.h"
 #include "../headers/ShorterSnakePowerUp.h"
 #include "../headers/InvincibilityPowerUp.h"
+#include "../headers/Exceptions.h"
 
 // init bounds
 void World::initBounds() {
@@ -155,6 +156,8 @@ void World::update() {
         }
     if (snake.getPosition() == fruit) {
         snake.extend();
+        if (snake.bodyLength() >= (windowSize.x - 2) * (windowSize.y - 2))
+            throw snake_error();
         Snake::increaseScore();
         snake.increaseSpeed();
         setRandomFruitPosition();

@@ -25,6 +25,9 @@ int main() {
     catch (font_error &err) {
         std::cout << err.what();
     }
+    catch (snake_error &err) {
+        std::cout << err.what();
+    }
     catch (...) {
         std::cout << "Unexpected error!\n";
     }

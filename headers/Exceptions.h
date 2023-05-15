@@ -16,5 +16,9 @@ public:
     explicit font_error() : application_error("Font can't be loaded\n") {}
 };
 
+class snake_error : public application_error {
+public:
+    explicit snake_error() : application_error("Snake got to big\n") {}
+};
 
 #endif //OOP_EXCEPTIONS_H
