@@ -10,9 +10,9 @@
  ![Screenshot from 2023-05-16 17-20-11](https://github.com/dragosc1/Snake-with-POWER-UPS/assets/99143914/67607476-3d1a-4b88-8e70-3902f9ac93e3) <br><br>
 ## Powerups:
 Slowed Time PowerUp <br>
- * color blue * <br>
+ -> color blue <br>
 Shorter Snake PowerUp <br>
- * color purple <br>
+ -> color purple <br>
 Invincibility PowerUp <br>
- * color yellow <br> <br>
+ -> color yellow <br> <br>
 All PowerUp affect the snake for only 30 ticks!
