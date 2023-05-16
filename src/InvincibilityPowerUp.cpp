@@ -3,6 +3,7 @@
 //
 
 #include "../headers/InvincibilityPowerUp.h"
+#include "../headers/Exceptions.h"
 
 //
 // Created by dragosc1 on 03.05.2023.
@@ -34,7 +35,21 @@ void InvincibilityPowerUp::applyPowerUp(Snake &snake) {
 }
 
 std::string InvincibilityPowerUp::displayType() {
-    return "Slow Time";
+    return "Invincibility";
+}
+
+void InvincibilityPowerUp::displayTextInv(sf::RenderWindow &window_) {
+    sf::Font font;
+    if (!font.loadFromFile("arial.ttf"))
+        throw font_error();
+    font.loadFromFile("arial.ttf");
+    sf::Text message;
+    message.setFont(font);
+    message.setFillColor(YELLOW);
+    message.setString("Invincibility for snake colliding only!");
+    message.setPosition(550, 20);
+    message.setCharacterSize(15);
+    window_.draw(message);
 }
 
 // clone

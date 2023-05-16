@@ -135,8 +135,15 @@ void World::render(sf::RenderWindow &window_) {
     for (const auto & bound : bounds)
         window_.draw(bound);
     window_.draw(fruitShape);
-    for (PowerUp* powerUp : powerUps)
+    for (PowerUp* powerUp : powerUps) {
         powerUp->render(window_);
+        if (powerUp->displayType() == "Invincibility") {
+            InvincibilityPowerUp* invPowerUp = dynamic_cast<InvincibilityPowerUp*>(powerUp);
+            if (invPowerUp)
+                invPowerUp->displayTextInv(window_);
+            else throw dynamic_cast_error();
+        }
+    }
 }
 
 // render snake

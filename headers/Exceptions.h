@@ -21,4 +21,9 @@ public:
     explicit snake_error() : application_error("Snake got to big\n") {}
 };
 
+class dynamic_cast_error : public application_error {
+public:
+    explicit dynamic_cast_error() : application_error("Dyanimc cast failed\n") {}
+};
+
 #endif //OOP_EXCEPTIONS_H

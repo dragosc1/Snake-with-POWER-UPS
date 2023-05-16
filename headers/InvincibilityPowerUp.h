@@ -16,6 +16,7 @@ public:
     void applyPowerUp(Snake& ) override;
     std::string displayType() override;
     InvincibilityPowerUp* clone() const override;
+    void displayTextInv(sf::RenderWindow &);
 };
 
 

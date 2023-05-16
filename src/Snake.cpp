@@ -94,6 +94,8 @@ void Snake::activateInvincibility() {
     invincibilityTime = 30;
 }
 
+bool Snake::isInvincible() { return invincible; }
+
 // get physicial direction
 Direction Snake::getPhysicalDirection() {
     const Cell &head = body[0];

@@ -28,6 +28,9 @@ int main() {
     catch (snake_error &err) {
         std::cout << err.what();
     }
+    catch (dynamic_cast_error &err) {
+        std::cout << err.what();
+    }
     catch (...) {
         std::cout << "Unexpected error!\n";
     }
