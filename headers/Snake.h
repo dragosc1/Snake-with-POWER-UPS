@@ -63,9 +63,6 @@ public:
     // snake activate invincibility
     void activateInvincibility();
 
-    // snake is invincible
-    bool isInvincible();
-
     // get physicial direction
     Direction getPhysicalDirection();
 
