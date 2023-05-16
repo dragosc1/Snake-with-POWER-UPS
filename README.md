@@ -7,7 +7,7 @@
 <kbd>→</kbd> - move one cell right
 ## Snake:
 <b>Ubuntu <br>
-![Screenshot from 2023-03-18 22-59-33](https://user-images.githubusercontent.com/99143914/226139733-5127c0bf-1e16-437e-94c4-160f5858ad68.png) <br>
+ ![Screenshot from 2023-05-16 17-20-11](https://github.com/dragosc1/Snake-with-POWER-UPS/assets/99143914/67607476-3d1a-4b88-8e70-3902f9ac93e3)
 <b> Windows <br>
 ![image](https://user-images.githubusercontent.com/99143914/228949573-33b23b7d-66a7-4269-b24b-bc6012e54ec2.png)
 ## Powerups:
