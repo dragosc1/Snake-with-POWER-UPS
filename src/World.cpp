@@ -166,6 +166,11 @@ void World::update() {
         if (snake.bodyLength() >= (windowSize.x - 2) * (windowSize.y - 2))
             throw snake_error();
         Snake::increaseScore();
+
+        // if score become a multiple of 25, add a a new powerUp
+        if (Snake::getScore() % 25 == 0)
+            setRandomPowerUp();
+
         snake.increaseSpeed();
         setRandomFruitPosition();
     }
