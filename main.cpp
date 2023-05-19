@@ -34,5 +34,5 @@ int main() {
     catch (...) {
         std::cout << "Unexpected error!\n";
     }
-    return 1;
+    return 0;
 }
