@@ -12,9 +12,10 @@ class Snake {
 private:
     // snake data
     std::vector<Cell> body;
-    float speed;
-    int score, speedTime;
-    bool lost;
+    double speed;
+    static int score;
+    int speedTime, invincibilityTime;
+    bool lost, invincible;
     Direction dir;
     int cellSize;
 public:
@@ -23,11 +24,14 @@ public:
     // reset snake
     void reset(const std::vector<Cell> &);
 
-    // snake direciton setter
+    // snake direction setter
     void setDirection(const Direction &);
 
     // snake lost
     bool hasLost();
+
+    // snake body length
+    unsigned int bodyLength();
 
     // snake get speed
     float getSpeed();
@@ -36,10 +40,13 @@ public:
     Cell getPosition();
 
     // get snake score
-    int getScore();
+    static int getScore();
 
     // increase score
-    void increaseScore();
+    static void increaseScore();
+
+    // increase snake speed
+    void increaseSpeed();
 
     // snake has lost
     void lose();
@@ -49,6 +56,12 @@ public:
 
     // snake move
     void move();
+
+    // snake shorter by 1/3
+    void shorter();
+
+    // snake activate invincibility
+    void activateInvincibility();
 
     // get physicial direction
     Direction getPhysicalDirection();

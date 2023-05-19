@@ -13,7 +13,7 @@ private:
     int x, y;
 public:
     // cell constructor
-    explicit Cell(int x_ = 0, int y_ = 0);
+    explicit Cell(int x_ = 1, int y_ = 1);
 
     // cell copy constructor
     Cell(const Cell&);

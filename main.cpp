@@ -1,14 +1,38 @@
 #include "headers/Game.h"
+#include <iostream>
 
 int main() {
     srand(time(nullptr));
-    Game game;
-    std::cout << "GAME INFO:\n\n";
-    std::cout << game;
-    while (game.windowNotClosed()) {
-        game.handleInput();
-        game.update();
-        game.render();
+    try {
+        Game game;
+        std::cout << "GAME INFO:\n\n";
+        std::cout << game;
+        while (game.windowNotClosed()) {
+            game.handleInput();
+            game.update();
+            game.render();
+        }
+    }
+    catch(std::overflow_error &err) {
+        std::cout << err.what();
+    }
+    catch(std::logic_error &err) {
+        std::cout << err.what();
+    }
+    catch (std::bad_alloc& err) {
+        std::cout << err.what();
+    }
+    catch (font_error &err) {
+        std::cout << err.what();
+    }
+    catch (snake_error &err) {
+        std::cout << err.what();
+    }
+    catch (dynamic_cast_error &err) {
+        std::cout << err.what();
+    }
+    catch (...) {
+        std::cout << "Unexpected error!\n";
     }
     return 1;
 }
