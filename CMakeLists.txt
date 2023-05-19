@@ -63,14 +63,14 @@ include(FetchContent)
 
 # NOTE: Also update SFML_VERSION env var in .github/workflows/cmake.yml:122
 FetchContent_Declare(
-  SFML
-  GIT_REPOSITORY https://github.com/SFML/SFML.git
-  GIT_TAG        863fef024619da7f59b6404087b454337a172ac1 # 2.6.x as of 2022-08-30
-  # GIT_TAG        72d88033e2f24be0fb1e9df614a56f3d5274154c # master as of 2022-08-30
-  # GIT_TAG        f7c88ee7ef4e1c705531cd614efb7dcff1f873cb # last commit merged in master before API breakage (2022-04-21)
-  # GIT_TAG        origin/master
-  # GIT_TAG        origin/2.6.x
-  # GIT_SHALLOW    1  # works only with branches or tags, not with arbitrary commit hashes
+        SFML
+        GIT_REPOSITORY https://github.com/SFML/SFML.git
+        GIT_TAG        863fef024619da7f59b6404087b454337a172ac1 # 2.6.x as of 2022-08-30
+        # GIT_TAG        72d88033e2f24be0fb1e9df614a56f3d5274154c # master as of 2022-08-30
+        # GIT_TAG        f7c88ee7ef4e1c705531cd614efb7dcff1f873cb # last commit merged in master before API breakage (2022-04-21)
+        # GIT_TAG        origin/master
+        # GIT_TAG        origin/2.6.x
+        # GIT_SHALLOW    1  # works only with branches or tags, not with arbitrary commit hashes
 )
 
 
@@ -93,15 +93,15 @@ endif()
 ###############################################################################
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
-add_executable(${PROJECT_NAME} main.cpp headers/extern.h headers/Cell.h src/Cell.cpp headers/GameWindow.h src/GameWindow.cpp headers/Snake.h src/Snake.cpp headers/World.h src/World.cpp headers/Game.h src/Game.cpp)
+add_executable(${PROJECT_NAME} main.cpp headers/extern.h headers/Cell.h src/Cell.cpp headers/GameWindow.h src/GameWindow.cpp headers/Snake.h src/Snake.cpp headers/World.h src/World.cpp headers/Game.h src/Game.cpp src/PowerUp.cpp headers/PowerUp.h src/SlowTimePowerUp.cpp headers/SlowTimePowerUp.h src/ShorterSnakePowerUp.cpp headers/ShorterSnakePowerUp.h headers/Exceptions.h src/InvincibilityPowerUp.cpp headers/InvincibilityPowerUp.h)
 
 ###############################################################################
 
 # target definitions
 
 if(GITHUB_ACTIONS)
-  message("NOTE: GITHUB_ACTIONS defined")
-  target_compile_definitions(${PROJECT_NAME} PRIVATE GITHUB_ACTIONS)
+    message("NOTE: GITHUB_ACTIONS defined")
+    target_compile_definitions(${PROJECT_NAME} PRIVATE GITHUB_ACTIONS)
 endif()
 
 ###############################################################################
