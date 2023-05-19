@@ -17,7 +17,7 @@ void World::initBounds() {
         if (i < 2) bounds[i].setPosition(0, 0);
         else {
             bounds[i].setOrigin(bounds[i].getSize());
-            bounds  [i].setPosition(sf::Vector2f(windowSize));
+            bounds[i].setPosition(sf::Vector2f(windowSize));
         }
     }
 }
