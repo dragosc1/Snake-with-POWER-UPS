@@ -6,6 +6,7 @@
 #define OOP_WORLD_H
 #include "Snake.h"
 #include "PowerUp.h"
+#include <vector>
 
 // The World
 class World {
@@ -15,9 +16,9 @@ private:
     sf::RectangleShape bounds[4];
     sf::CircleShape fruitShape;
     sf::Vector2u windowSize;
-    int cellSize;
+    int cellSize = 16;
     Cell fruit;
-    std::vector<PowerUp*> powerUps;
+//    std::vector<PowerUp*> powerUps;
 
     // init bounds
     void initBounds();

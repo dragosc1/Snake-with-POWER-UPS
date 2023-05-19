@@ -17,7 +17,7 @@ void World::initBounds() {
         if (i < 2) bounds[i].setPosition(0, 0);
         else {
             bounds[i].setOrigin(bounds[i].getSize());
-            bounds  [i].setPosition(sf::Vector2f(windowSize));
+            bounds [i].setPosition(sf::Vector2f(windowSize));
         }
     }
 }
@@ -46,28 +46,27 @@ std::vector <Cell> World::randomSnakeLength3() {
 
 // cleanUp powerUps
 void World::cleanUp() {
-    for (unsigned int i = 0; i < powerUps.size(); i++)
-        delete powerUps[i];
-    powerUps.clear();
+//    powerUps.clear();
 }
 
 // world constructors
 World::World(const sf::Vector2u &windowSize_) : snake(cellSize = 16, randomSnakeLength3()), windowSize(windowSize_) {
-    powerUps.clear();
+    fruit = Cell(0, 0);
     fruitShape.setFillColor(RED);
     fruitShape.setRadius(8);
     setRandomFruitPosition();
     setRandomPowerUp();
     cellSize = 16;
     initBounds();
+//    powerUps.clear();
 }
 
 World::World(const World& other) : snake(other.snake), fruitShape(other.fruitShape), windowSize(other.windowSize), cellSize(other.cellSize), fruit(other.fruit) {
     for (int i = 0; i < 4; i++)
         bounds[i] = other.bounds[i];
-    powerUps.clear();
-    for (unsigned int i = 0; i < other.powerUps.size(); i++)
-        powerUps.push_back(other.powerUps[i]->clone());
+//    powerUps.clear();
+//    for (unsigned int i = 0; i < other.powerUps.size(); i++)
+//        powerUps.push_back(other.powerUps[i]->clone());
 }
 
 // world operator=
@@ -84,7 +83,7 @@ void swap(World &world1, World &world2) {
     swap(world1.windowSize, world2.windowSize);
     swap(world1.cellSize, world2.cellSize);
     swap(world1.bounds, world2.bounds);
-    swap(world1.powerUps, world2.powerUps);
+//    swap(world1.powerUps, world2.powerUps);
 }
 
 // fruit random position
@@ -99,23 +98,23 @@ void World::setRandomFruitPosition() {
 
 // fruit random position
 void World::setRandomPowerUp() {
-    int maxX = (windowSize.x / cellSize) - 2;
-    int maxY = (windowSize.y / cellSize) - 2;
-    int x = rand() % maxX + 1;
-    int y = rand() % maxY + 1;
-    int type = rand() % PowerUpCount;
-    if (type == SlowTimePowerUpType) {
-        PowerUp *powerUp = new SlowTimePowerUp({{x, y}, cellSize});
-        powerUps.push_back(powerUp);
-    }
-    else if (type == ShorterSnakePowerUpType) {
-        PowerUp *powerUp = new ShorterSnakePowerUp({{x, y}, cellSize});
-        powerUps.push_back(powerUp);
-    }
-    else if (type == InvincibilityPowerUpType) {
-        PowerUp *powerUp = new InvincibilityPowerUp({{x, y}, cellSize});
-        powerUps.push_back(powerUp);
-    }
+//    int maxX = (windowSize.x / cellSize) - 2;
+//    int maxY = (windowSize.y / cellSize) - 2;
+//    int x = rand() % maxX + 1;
+//    int y = rand() % maxY + 1;
+//    int type = rand() % PowerUpCount;
+//    if (type == SlowTimePowerUpType) {
+//        PowerUp *powerUp = new SlowTimePowerUp({{x, y}, cellSize});
+//        powerUps.push_back(powerUp);
+//    }
+//    else if (type == ShorterSnakePowerUpType) {
+//        PowerUp *powerUp = new ShorterSnakePowerUp({{x, y}, cellSize});
+//        powerUps.push_back(powerUp);
+//    }
+//    else if (type == InvincibilityPowerUpType) {
+//        PowerUp *powerUp = new InvincibilityPowerUp({{x, y}, cellSize});
+//        powerUps.push_back(powerUp);
+//    }
 }
 
 // world operator<<
@@ -123,8 +122,8 @@ std::ostream &operator<<(std::ostream &os, const World &world) {
     os << world.snake << "Fruit:\t" << "X=" << world.fruitShape.getPosition().x << "; Y="
        << world.fruitShape.getPosition().y << '\n';
     os << "PowerUps available:\n";
-    for (PowerUp *powerUp : world.powerUps)
-        os << powerUp;
+//    for (PowerUp *powerUp : world.powerUps)
+//        os << powerUp;
     os << "\n\n";
     os << "Cell size: " << world.cellSize << '\n';
     return os;
@@ -135,15 +134,15 @@ void World::render(sf::RenderWindow &window_) {
     for (const auto & bound : bounds)
         window_.draw(bound);
     window_.draw(fruitShape);
-    for (PowerUp* powerUp : powerUps) {
-        powerUp->render(window_);
-        if (powerUp->displayType() == "Invincibility") {
-            InvincibilityPowerUp* invPowerUp = dynamic_cast<InvincibilityPowerUp*>(powerUp);
-            if (invPowerUp)
-                invPowerUp->displayTextInv(window_);
-            else throw dynamic_cast_error();
-        }
-    }
+//    for (PowerUp* powerUp : powerUps) {
+//        powerUp->render(window_);
+//        if (powerUp->displayType() == "Invincibility") {
+//            InvincibilityPowerUp* invPowerUp = dynamic_cast<InvincibilityPowerUp*>(powerUp);
+//            if (invPowerUp)
+//                invPowerUp->displayTextInv(window_);
+//            else throw dynamic_cast_error();
+//        }
+//    }
 }
 
 // render snake
@@ -153,14 +152,14 @@ void World::renderSnake(sf::RenderWindow &window_) {
 
 // update snake
 void World::update() {
-    for (unsigned int i = 0; i < powerUps.size(); i++)
-        if (snake.getPosition() == powerUps[i]->getPosition()) {
-            powerUps[i]->applyPowerUp(snake);
-            delete powerUps[i];
-            powerUps.erase(powerUps.begin() + i);
-            setRandomPowerUp();
-            break;
-        }
+//    for (unsigned int i = 0; i < powerUps.size(); i++)
+//        if (snake.getPosition() == powerUps[i]->getPosition()) {
+//            powerUps[i]->applyPowerUp(snake);
+//            delete powerUps[i];
+//            powerUps.erase(powerUps.begin() + i);
+//            setRandomPowerUp();
+//            break;
+//        }
     if (snake.getPosition() == fruit) {
         snake.extend();
         if (snake.bodyLength() >= (windowSize.x - 2) * (windowSize.y - 2))
