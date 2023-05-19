@@ -1,12 +1,9 @@
 //
 // Created by dragosc1 on 21.04.2023.
 //
-
+// The snake
 // snake constructors
 #include "../headers/Snake.h"
-
-int Snake::score = 0;
-
 Snake::Snake(const int &cellSize_, const std::vector <Cell> &body_) : cellSize(cellSize_) {
     reset(body_);
 }
@@ -21,7 +18,6 @@ void Snake::reset(const std::vector <Cell> &body_) {
     score = 0;
     speed = 1;
     speedTime = 1e9;
-    invincibilityTime = 0;
     lost = false;
 }
 
@@ -30,9 +26,6 @@ void Snake::setDirection(const Direction &dir_) { dir = dir_; }
 
 // snake lost
 bool Snake::hasLost() { return lost; }
-
-// snake body length
-unsigned int Snake::bodyLength() { return body.size(); }
 
 // snake get speed
 float Snake::getSpeed() { return speed; }
@@ -45,9 +38,6 @@ int Snake::getScore() { return score; }
 
 // increase score
 void Snake::increaseScore() { score++; }
-
-// increase snake speed
-void Snake::increaseSpeed() { speed *= 1.1; }
 
 // snake has lost
 void Snake::lose() { lost = true; }
@@ -81,19 +71,6 @@ void Snake::move() {
         body[0].setY(body[0].getY() + 1);
 }
 
-// snake shorter by 1/3
-void Snake::shorter() {
-    // if the length is <= 2 it doesn't do anything
-    for (unsigned int i = 0; i < body.size() / 3; i++)
-        body.pop_back();
-}
-
-// snake activate invincibility
-void Snake::activateInvincibility() {
-    invincible = 1;
-    invincibilityTime = 30;
-}
-
 // get physicial direction
 Direction Snake::getPhysicalDirection() {
     const Cell &head = body[0];
@@ -121,13 +98,7 @@ void Snake::tick() {
         speedTime = 1e9;
     }
     move();
-    if (!invincible)
-        checkCollision();
-    else {
-        invincibilityTime--;
-        if (invincibilityTime == 0)
-            invincible = 0;
-    }
+    checkCollision();
 }
 
 // snake out of bounds

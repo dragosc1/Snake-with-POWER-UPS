@@ -93,7 +93,7 @@ endif()
 ###############################################################################
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
-add_executable(${PROJECT_NAME} main.cpp headers/extern.h headers/Cell.h src/Cell.cpp headers/GameWindow.h src/GameWindow.cpp headers/Snake.h src/Snake.cpp headers/World.h src/World.cpp headers/Game.h src/Game.cpp src/PowerUp.cpp headers/PowerUp.h src/SlowTimePowerUp.cpp headers/SlowTimePowerUp.h src/ShorterSnakePowerUp.cpp headers/ShorterSnakePowerUp.h headers/Exceptions.h src/InvincibilityPowerUp.cpp headers/InvincibilityPowerUp.h)
+add_executable(${PROJECT_NAME} main.cpp headers/extern.h headers/Cell.h src/Cell.cpp headers/GameWindow.h src/GameWindow.cpp headers/Snake.h src/Snake.cpp headers/World.h src/World.cpp headers/Game.h src/Game.cpp)
 
 ###############################################################################
 

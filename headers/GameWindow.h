@@ -5,7 +5,6 @@
 #ifndef OOP_GAMEWINDOW_H
 #define OOP_GAMEWINDOW_H
 #include "extern.h"
-
 // The window
 class GameWindow {
 private:

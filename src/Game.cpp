@@ -1,16 +1,15 @@
 //
 // Created by dragosc1 on 21.04.2023.
 //
+// The game
+// game data
 #include "../headers/Game.h"
-
 // init score
 void Game::initScore() {
-    if (!font.loadFromFile("arial.ttf"))
-        throw font_error();
     font.loadFromFile("arial.ttf");
     score.setFont(font);
     score.setString("Score: ");
-    score.setPosition(sf::Vector2f(30, 20));
+    score.setPosition(sf::Vector2f(700, 16));
     score.setCharacterSize(20);
     score.setFillColor(WHITE);
 }
@@ -59,9 +58,13 @@ void Game::handleInput() {
 void Game::update() {
     window.update(); // Update window events.
     if (timespent >= timestep) {
+        world.tickSnake();
         world.update();
-        if (world.snakeHasLost())
-            world.reset();
+        if (world.snakeHasLost()) {
+            world.resetSnake();
+            world.setRandomFruitPosition();
+            world.setRandomSlowTimePosition();
+        }
         timespent = 0.f;
     } else timespent += world.getSnakeSpeed();
 }
