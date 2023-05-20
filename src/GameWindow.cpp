@@ -5,7 +5,7 @@
 
 // window create
 void GameWindow::create() {
-    auto style = (isFullscreen ? sf::Style::Fullscreen : sf::Style::Default);
+    auto style = sf::Style::Titlebar | sf::Style::Close;
     window.create({windowSize.x, windowSize.y, 32}, windowTitle, style);
 }
 
@@ -18,7 +18,6 @@ void GameWindow::destroy() {
 void GameWindow::setup(const std::string &title, const sf::Vector2u &size) {
     windowTitle = title;
     windowSize = size;
-    isFullscreen = false;
     isclosed = false;
     create();
 }
@@ -33,7 +32,6 @@ GameWindow::GameWindow(int width_, int height_) {
 std::ostream &operator<<(std::ostream &os, const GameWindow &gameWindow) {
     os << "Window dimensions: " << gameWindow.window.getSize().x << 'x' << gameWindow.window.getSize().y << '\n';
     os << "Window title: " << gameWindow.windowTitle << '\n';
-    os << "Window fullScreen: " << (gameWindow.isFullscreen ? "Yes\n" : "No\n");
     return os;
 }
 
@@ -68,8 +66,6 @@ void GameWindow::update() {
     while (window.pollEvent(event))
         if (event.type == sf::Event::Closed)
             isclosed = true;
-        else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F5)
-            toggleFullscreen();
 }
 
 // window is closed
@@ -80,11 +76,4 @@ bool GameWindow::isClosed() {
 // window destructor
 GameWindow::~GameWindow() {
     destroy();
-}
-
-// toggle fullscreen
-void GameWindow::toggleFullscreen() {
-    isFullscreen = !isFullscreen;
-    destroy();
-    create();
 }

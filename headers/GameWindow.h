@@ -11,7 +11,7 @@ class GameWindow {
 private:
     // window data
     sf::RenderWindow window;
-    bool isclosed, isFullscreen;
+    bool isclosed;
     sf::Vector2u windowSize;
     std::string windowTitle;
 
@@ -53,9 +53,6 @@ public:
 
     // window destructor
     ~GameWindow();
-
-    // toggle fullscreen
-    void toggleFullscreen();
 
 };
 
