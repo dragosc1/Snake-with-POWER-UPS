@@ -17,6 +17,7 @@ const sf::Color LGRAY = sf::Color(100, 100, 100);
 const sf::Color BLUE = sf::Color::Blue;
 const sf::Color PURPLE = sf::Color(100, 0, 100);
 const sf::Color YELLOW = sf::Color(255, 255, 0);
+const sf::Color PINK = sf::Color(255,182,193);
 
 // directions for snake
 enum class Direction {
@@ -31,7 +32,8 @@ enum PowerUps {
     SlowTimePowerUpType,
     ShorterSnakePowerUpType,
     InvincibilityPowerUpType,
-    PowerUpCount
+    FasterTimePowerUpType,
+    PowerUpCount,
 };
 
 #endif //OOP_EXTERN_H

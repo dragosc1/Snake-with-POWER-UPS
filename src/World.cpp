@@ -6,6 +6,7 @@
 #include "../headers/ShorterSnakePowerUp.h"
 #include "../headers/InvincibilityPowerUp.h"
 #include "../headers/Exceptions.h"
+#include "../headers/FasterTimePowerUp.h"
 
 // init bounds
 void World::initBounds() {
@@ -114,6 +115,10 @@ void World::setRandomPowerUp() {
     }
     else if (type == InvincibilityPowerUpType) {
         PowerUp *powerUp = new InvincibilityPowerUp({{x, y}, cellSize});
+        powerUps.push_back(powerUp);
+    }
+    else if (type == FasterTimePowerUpType) {
+        PowerUp *powerUp = new FasterTimePowerUp({{x, y}, cellSize});
         powerUps.push_back(powerUp);
     }
 }

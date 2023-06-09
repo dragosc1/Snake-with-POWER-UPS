@@ -7,8 +7,6 @@
 #include "PowerUp.h"
 
 class ShorterSnakePowerUp : public PowerUp {
-private:
-
 public:
     ShorterSnakePowerUp(const ShorterSnakePowerUp& );
     ShorterSnakePowerUp& operator=(const ShorterSnakePowerUp& );
