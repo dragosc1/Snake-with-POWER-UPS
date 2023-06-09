@@ -154,7 +154,7 @@ void Snake::affectTime(const std::string& effect) {
     if (effect == "half")
         speed = speed * 1.0 / 2;
     else if (effect == "double")
-        speed = speed * 1.0 / 2;
+        speed = speed * 2;
     speedTime = 30;
 }
 
