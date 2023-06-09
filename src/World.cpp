@@ -138,10 +138,9 @@ void World::render(sf::RenderWindow &window_) {
     for (PowerUp* powerUp : powerUps) {
         powerUp->render(window_);
         if (powerUp->displayType() == "Invincibility") {
-            InvincibilityPowerUp* invPowerUp = dynamic_cast<InvincibilityPowerUp*>(powerUp);
+            InvincibilityPowerUp* invPowerUp = static_cast<InvincibilityPowerUp*>(powerUp);
             if (invPowerUp)
                 invPowerUp->displayTextInv(window_);
-            else throw dynamic_cast_error();
         }
     }
 }
