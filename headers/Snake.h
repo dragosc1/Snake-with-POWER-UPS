@@ -46,7 +46,7 @@ public:
     static void increaseScore();
 
     // increase snake speed
-    void increaseSpeed();
+    void increaseSpeed(double );
 
     // snake has lost
     void lose();
@@ -78,8 +78,8 @@ public:
     // snake check collision
     void checkCollision();
 
-    // slow time
-    void slowTime();
+    // affect time
+    void affectTime(const std::string& );
 
     // snake render
     void render(sf::RenderWindow &);

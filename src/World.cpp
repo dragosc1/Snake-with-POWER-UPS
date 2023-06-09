@@ -171,7 +171,7 @@ void World::update() {
         if (Snake::getScore() % 25 == 0)
             setRandomPowerUp();
 
-        snake.increaseSpeed();
+        snake.increaseSpeed(0.1);
         setRandomFruitPosition();
     }
     if (snake.outOfBounds(windowSize))

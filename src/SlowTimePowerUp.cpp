@@ -27,7 +27,7 @@ void SlowTimePowerUp::render(sf::RenderWindow &window) {
 }
 
 void SlowTimePowerUp::applyPowerUp(Snake &snake) {
-    snake.slowTime();
+    snake.affectTime("half");
 }
 
 std::string SlowTimePowerUp::displayType() {
