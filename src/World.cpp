@@ -53,7 +53,7 @@ void World::cleanUp() {
 }
 
 // world constructors
-World::World(const sf::Vector2u &windowSize_) : snake(cellSize = 16, randomSnakeLength3(16)), windowSize(windowSize_) {
+World::World(const sf::Vector2u &windowSize_) : snake(Snake::getSnake(cellSize = 16, randomSnakeLength3(16))), windowSize(windowSize_) {
     powerUps.clear();
     fruitShape.setFillColor(RED);
     fruitShape.setRadius(8);

@@ -11,7 +11,7 @@
 class World {
 private:
     // world data
-    Snake snake;
+    Snake &snake;
     sf::RectangleShape bounds[4];
     sf::CircleShape fruitShape;
     sf::Vector2u windowSize;

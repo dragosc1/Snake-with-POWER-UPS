@@ -7,6 +7,11 @@
 
 int Snake::score = 0;
 
+Snake& Snake::getSnake(const int& cellSize_, const std::vector<Cell> &body_) {
+    static Snake snakeInstance(cellSize_, body_);
+    return snakeInstance;
+}
+
 Snake::Snake(const int &cellSize_, const std::vector <Cell> &body_) : cellSize(cellSize_) {
     reset(body_);
 }

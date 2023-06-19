@@ -75,7 +75,7 @@ void Game<T>::update() {
         world.update();
         if (world.snakeHasLost())
             world.reset();
-        timespent = 0.0;
+        timespent = (T) 0.0;
     } else timespent += world.getSnakeSpeed();
 }
 

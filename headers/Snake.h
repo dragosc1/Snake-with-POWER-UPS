@@ -19,6 +19,9 @@ private:
     Direction dir;
     int cellSize;
 public:
+    // snake instance
+    static Snake& getSnake(const int&, const std::vector<Cell>& );
+
     // snake constructors
     explicit Snake(const int& , const std::vector<Cell> &);
 
