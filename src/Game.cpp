@@ -89,3 +89,6 @@ bool Game<T>::windowNotClosed() {
 // game destructor
 template <typename T>
 Game<T>::~Game() = default;
+
+template std::ostream& operator<<(std::ostream &, const Game<double> &);
+template std::ostream& operator<<(std::ostream &, const Game<float> &);

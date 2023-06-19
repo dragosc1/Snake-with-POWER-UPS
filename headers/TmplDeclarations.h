@@ -5,10 +5,10 @@
 #ifndef OOP_TMPLDECLARATIONS_H
 #define OOP_TMPLDECLARATIONS_H
 
+#include "Game.h"
+
 template class Game<double>;
 template class Game<float>;
-template std::ostream &operator<<(std::ostream &, const Game<double> &);
-template std::ostream &operator<<(std::ostream &, const Game<float> &);
 
 #endif //OOP_TMPLDECLARATIONS_H
 

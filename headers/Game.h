@@ -7,6 +7,7 @@
 #include "World.h"
 #include "GameWindow.h"
 #include "Exceptions.h"
+#include <ostream>
 
 // The game
 template<typename T>
