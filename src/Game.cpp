@@ -31,7 +31,7 @@ void Game<T>::drawScore() {
 
 // game constructors
 template <typename T>
-Game<T>::Game() : world(sf::Vector2u(800, 600)), window() {
+Game<T>::Game() : world(sf::Vector2u(800, 600)), window(GameWindow::getGameWindow()) {
     initScore();
 }
 

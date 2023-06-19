@@ -24,6 +24,9 @@ private:
     // window setup
     void setup(const std::string& , const sf::Vector2u& );
 public:
+    // window instance
+    static GameWindow& getGameWindow();
+
     // window constructor
     GameWindow(int width_ = 800, int height_ = 600);
 

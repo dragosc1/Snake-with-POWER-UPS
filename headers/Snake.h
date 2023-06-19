@@ -21,6 +21,7 @@ private:
 public:
     // snake constructors
     explicit Snake(const int& , const std::vector<Cell> &);
+
     // reset snake
     void reset(const std::vector<Cell> &);
 

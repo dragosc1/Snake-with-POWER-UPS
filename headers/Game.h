@@ -15,7 +15,7 @@ class Game {
 private:
     // game data
     World world;
-    GameWindow window;
+    GameWindow &window;
     T timespent = 0, timestep = 10;
     sf::Text score;
     sf::Font font;

@@ -3,6 +3,12 @@
 //
 #include "../headers/GameWindow.h"
 
+// window instance
+GameWindow& GameWindow::getGameWindow() {
+    static GameWindow gameWindowInstance;
+    return gameWindowInstance;
+}
+
 // window create
 void GameWindow::create() {
     auto style = sf::Style::Titlebar | sf::Style::Close;
