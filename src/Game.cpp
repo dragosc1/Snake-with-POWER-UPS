@@ -2,9 +2,17 @@
 // Created by dragosc1 on 21.04.2023.
 //
 #include "../headers/Game.h"
+#include "../headers/TmplDeclarations.h"
+
+template <typename T>
+Game<T>& Game<T>::getGame() {
+    static Game<T> gameInstance;
+    return gameInstance;
+}
 
 // init score
-void Game::initScore() {
+template <typename T>
+void Game<T>::initScore() {
     if (!font.loadFromFile("arial.ttf"))
         throw font_error();
     font.loadFromFile("arial.ttf");
@@ -16,25 +24,29 @@ void Game::initScore() {
 }
 
 // game draw score
-void Game::drawScore() {
+template <typename T>
+void Game<T>::drawScore() {
     score.setString("Score: " + std::to_string(world.getSnakeScore()));
     window.drawScore(score);
 }
 
 // game constructors
-Game::Game() : world(sf::Vector2u(800, 600)), window() {
+template <typename T>
+Game<T>::Game() : world(sf::Vector2u(800, 600)), window() {
     initScore();
 }
 
 // game operator<<
-std::ostream &operator<<(std::ostream &os, const Game &game) {
+template <typename T>
+std::ostream &operator<<(std::ostream &os, const Game<T> &game) {
     os << game.world << game.window << "Time spent: " << game.timespent << '\n' << "Time step: " << game.timestep
        << '\n';
     return os;
 }
 
 // render game
-void Game::render() {
+template <typename T>
+void Game<T>::render() {
     window.beginDraw();
     drawScore();
     world.render(window.getWindow());
@@ -43,7 +55,8 @@ void Game::render() {
 }
 
 // handle the input
-void Game::handleInput() {
+template <typename T>
+void Game<T>::handleInput() {
     window.update();
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
         world.updateSnakeDirection(Direction::Up);
@@ -56,20 +69,23 @@ void Game::handleInput() {
 }
 
 // game update
-void Game::update() {
+template <typename T>
+void Game<T>::update() {
     window.update(); // Update window events.
     if (timespent >= timestep) {
         world.update();
         if (world.snakeHasLost())
             world.reset();
-        timespent = 0.f;
+        timespent = 0.0;
     } else timespent += world.getSnakeSpeed();
 }
 
 // game window not closed
-bool Game::windowNotClosed() {
+template <typename T>
+bool Game<T>::windowNotClosed() {
     return !window.isClosed();
 }
 
 // game destructor
-Game::~Game() = default;
+template <typename T>
+Game<T>::~Game() = default;

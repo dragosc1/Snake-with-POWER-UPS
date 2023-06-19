@@ -4,7 +4,8 @@
 int main() {
     srand(time(nullptr));
     try {
-        Game game;
+        // try different ticking methods with double / float
+        auto &game = Game<float>::getGame();
         std::cout << "GAME INFO:\n\n";
         std::cout << game;
         while (game.windowNotClosed()) {

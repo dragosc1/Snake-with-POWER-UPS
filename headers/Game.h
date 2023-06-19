@@ -9,12 +9,13 @@
 #include "Exceptions.h"
 
 // The game
+template<typename T>
 class Game {
 private:
     // game data
     World world;
     GameWindow window;
-    float timespent = 0, timestep = 10;
+    T timespent = 0, timestep = 10;
     sf::Text score;
     sf::Font font;
 
@@ -25,11 +26,15 @@ private:
     void drawScore();
 
 public:
+    // get game instance
+    static Game& getGame();
+
     // game constructors
     Game();
 
     // game operator<<
-    friend std::ostream& operator<<(std::ostream& , const Game& );
+    template<class TA>
+    friend std::ostream& operator<<(std::ostream& , const Game<TA>& );
 
     // render game
     void render();
