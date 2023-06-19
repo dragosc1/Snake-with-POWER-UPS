@@ -2,7 +2,6 @@
 // Created by dragosc1 on 21.04.2023.
 //
 #include "../headers/Game.h"
-#include "../headers/TmplDeclarations.h"
 
 template <typename T>
 Game<T>& Game<T>::getGame() {
@@ -90,5 +89,8 @@ bool Game<T>::windowNotClosed() {
 template <typename T>
 Game<T>::~Game() = default;
 
+// declarations
 template std::ostream& operator<<(std::ostream &, const Game<double> &);
 template std::ostream& operator<<(std::ostream &, const Game<float> &);
+template class Game<double>;
+template class Game<float>;
