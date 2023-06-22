@@ -15,4 +15,6 @@ Shorter Snake PowerUp <br>
  -> color: purple <br><br>
 Invincibility PowerUp <br>
  -> color: yellow <br> <br>
+Faster Time PowerUp (nerf) <be>
+ -> color: pink <br><br>
 All PowerUp affect the snake for only 30 ticks!
