@@ -8,13 +8,13 @@
 #include <iostream>
 
 // constants for colors
-const sf::Color GREEN = sf::Color::Green;
+const sf::Color GREEN = sf::Color(0, 255, 0);
 const sf::Color D_GREEN = sf::Color(0, 195, 50);
-const sf::Color BLACK = sf::Color::Black;
-const sf::Color RED = sf::Color::Red;
-const sf::Color WHITE = sf::Color::White;
+const sf::Color BLACK = sf::Color(0, 0, 0);
+const sf::Color RED = sf::Color(255, 0, 0);
+const sf::Color WHITE = sf::Color(0, 0, 0);
 const sf::Color LGRAY = sf::Color(100, 100, 100);
-const sf::Color BLUE = sf::Color::Blue;
+const sf::Color BLUE = sf::Color(0, 0, 255);
 const sf::Color PURPLE = sf::Color(100, 0, 100);
 const sf::Color YELLOW = sf::Color(255, 255, 0);
 const sf::Color PINK = sf::Color(255,182,193);
