@@ -105,22 +105,8 @@ void World::setRandomPowerUp() {
     int x = rand() % maxX + 1;
     int y = rand() % maxY + 1;
     int type = rand() % PowerUpCount;
-    if (type == SlowTimePowerUpType) {
-        PowerUp *powerUp = new SlowTimePowerUp({{x, y}, cellSize});
-        powerUps.push_back(powerUp);
-    }
-    else if (type == ShorterSnakePowerUpType) {
-        PowerUp *powerUp = new ShorterSnakePowerUp({{x, y}, cellSize});
-        powerUps.push_back(powerUp);
-    }
-    else if (type == InvincibilityPowerUpType) {
-        PowerUp *powerUp = new InvincibilityPowerUp({{x, y}, cellSize});
-        powerUps.push_back(powerUp);
-    }
-    else if (type == FasterTimePowerUpType) {
-        PowerUp *powerUp = new FasterTimePowerUp({{x, y}, cellSize});
-        powerUps.push_back(powerUp);
-    }
+    PowerUp* powerUp = PowerUpFactory::create(type, x, y, cellSize);
+    powerUps.push_back(powerUp);
 }
 
 // world operator<<

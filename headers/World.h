@@ -6,6 +6,7 @@
 #define OOP_WORLD_H
 #include "Snake.h"
 #include "PowerUp.h"
+#include "PowerUpFactory.h"
 
 // The World
 class World {
